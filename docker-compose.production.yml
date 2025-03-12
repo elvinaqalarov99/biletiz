@@ -1,0 +1,75 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    restart: on-failure:5
+    env_file:
+      - ./backend/.env.development.production
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile # Specify the custom Dockerfile name
+    volumes:
+      - ./backend:/app # Mount the local directory into the container
+      - /app/node_modules # Prevent conflicts between local and container node_modules
+    restart: on-failure:5
+    depends_on:
+      - postgres
+    env_file:
+      - ./backend/.env.development.production
+    ports:
+      - "5001:5001"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile # Specify the custom Dockerfile name
+    container_name: nextjs_container
+    volumes:
+      - ./frontend:/app # Mount the local directory into the container
+      - /app/node_modules # Prevent conflicts between local and container node_modules
+      - /app/.next # Avoid overwriting the build directory
+    restart: on-failure:5
+    depends_on:
+      - backend
+    env_file:
+      - ./frontend/.env.development.production
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - app_network
+
+  nginx:
+    build: ./nginx
+    container_name: nginx_proxy
+    restart: on-failure:5
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - app_network
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
