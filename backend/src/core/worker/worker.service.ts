@@ -21,7 +21,7 @@ export class WorkerService {
         console.log(`Start to parse events (page ${page})`);
 
         const eventsRes = await this.iTicketApiService.events(page);
-        if (eventsRes !== null) {
+        if (eventsRes !== null && eventsRes.response.events.data.length) {
           finished = !eventsRes.response.events.next_page_url;
           page++;
 
