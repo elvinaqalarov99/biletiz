@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Cron } from "@nestjs/schedule";
 import { ITicketApiService } from "../../integrations/iticket-api/iticket-api.service";
-import {sleep} from "../../common/helper";
+import { sleep } from "../../common/helper";
 
 @Injectable()
 export class WorkerService {
