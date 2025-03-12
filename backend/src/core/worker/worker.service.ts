@@ -27,6 +27,8 @@ export class WorkerService {
 
           // save events to db
           // const events = eventsRes.response.events.data;
+        } else {
+          console.log(`Events are empty on this page, skipping...!`);
         }
       } catch (error) {
         console.log(
