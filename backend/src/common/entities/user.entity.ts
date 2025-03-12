@@ -50,10 +50,6 @@ export class UserEntity {
   twoFactorEnabled?: boolean;
 
   @Exclude()
-  @Column({ default: 0 })
-  failedLoginAttempts?: number;
-
-  @Exclude()
   @Column({ nullable: true })
   lastLoginAt?: Date;
 
