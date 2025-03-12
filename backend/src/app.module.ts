@@ -21,6 +21,7 @@ import { WorkerModule } from "./core/worker/worker.module";
 
 import * as path from "path";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import { ITicketApiModule } from "./integrations/iticket-api/iticket-api.module";
 
 const envFilePath = path.resolve(
   __dirname,
@@ -78,6 +79,7 @@ const envFilePath = path.resolve(
     PermissionModule,
     RbacModule,
     WorkerModule,
+    ITicketApiModule,
   ],
   controllers: [AppController],
   providers: [AppService],
