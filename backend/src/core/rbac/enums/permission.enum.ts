@@ -16,4 +16,7 @@ export enum PermissionEnum {
   Permission_Read = "permission_read",
   Permission_Update = "permission_update",
   Permission_Delete = "permission_delete",
+
+  // categories
+  Category_Read = "category_read",
 }

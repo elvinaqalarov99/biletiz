@@ -1,27 +1,28 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { ScheduleModule } from "@nestjs/schedule";
 
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { ScheduleModule } from "@nestjs/schedule";
 import { UserModule } from "./modules/users/user.module";
 import { RoleModule } from "./modules/roles/role.module";
 import { ThrottlerModule } from "@nestjs/throttler";
 import { RbacModule } from "./core/rbac/rbac.module";
 import { PermissionModule } from "./modules/permissions/permission.module";
 import { AuthModule } from "./modules/auth/auth.module";
+import { ITicketApiModule } from "./integrations/iticket-api/iticket-api.module";
+import { CategoryModule } from "./modules/categories/category.module";
+import { WorkerModule } from "./core/worker/worker.module";
 
 import { AppController } from "./app.controller";
+
 import { AppService } from "./app.service";
 
 import appConfig, { ENV_DEV } from "./common/config/app.config";
 import databaseConfig from "./common/config/database.config";
 import jwtConfig from "./common/config/jwt.config";
 
-import { WorkerModule } from "./core/worker/worker.module";
-
 import * as path from "path";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
-import { ITicketApiModule } from "./integrations/iticket-api/iticket-api.module";
 
 const envFilePath = path.resolve(
   __dirname,
@@ -77,6 +78,7 @@ const envFilePath = path.resolve(
     UserModule,
     RoleModule,
     PermissionModule,
+    CategoryModule,
     RbacModule,
     WorkerModule,
     ITicketApiModule,

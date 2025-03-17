@@ -10,11 +10,11 @@ export class UserRoleEntity {
   @PrimaryColumn()
   roleId: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.roles, { onDelete: "CASCADE" })
+  @ManyToOne(() => UserEntity, (user) => user.roles, { cascade: true })
   @JoinColumn({ name: "user_id" })
   user: UserEntity;
 
-  @ManyToOne(() => RoleEntity, (role) => role.users, { onDelete: "CASCADE" })
+  @ManyToOne(() => RoleEntity, (role) => role.users, { cascade: true })
   @JoinColumn({ name: "role_id" })
   role: RoleEntity;
 

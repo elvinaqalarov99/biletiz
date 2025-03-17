@@ -10,14 +10,12 @@ export class RolePermissionEntity {
   @PrimaryColumn()
   permissionId: number;
 
-  @ManyToOne(() => RoleEntity, (role) => role.permissions, {
-    onDelete: "CASCADE",
-  })
+  @ManyToOne(() => RoleEntity, (role) => role.permissions, { cascade: true })
   @JoinColumn({ name: "role_id" })
   role: RoleEntity;
 
   @ManyToOne(() => PermissionEntity, (permission) => permission.roles, {
-    onDelete: "CASCADE",
+    cascade: true,
   })
   @JoinColumn({ name: "permission_id" })
   permission: PermissionEntity;
