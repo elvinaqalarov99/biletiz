@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Category } from "@/interfaces/category";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 interface CategoryListProps {
   categories: Category[];
@@ -28,55 +29,46 @@ const pastelColors = [
 ];
 
 const CategoryList = ({ categories }: CategoryListProps) => {
+  const [randomBackgroundColor, setRandomBackgroundColor] = useState("");
+  const [textStyle, setTextStyle] = useState("");
+
+  useEffect(() => {
+    setRandomBackgroundColor(
+      pastelColors[Math.floor(Math.random() * pastelColors.length)],
+    );
+    setTextStyle("text-gray-900 italic");
+  }, []);
+
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {categories.map((category) => {
-        // Generate a random hue for each category card
-        // const randomHue = getRandomHue();
-
-        // Use a gradient background with the random hue
-        // const cardBackground = `linear-gradient(45deg, hsl(${randomHue}, 70%, 75%), hsl(${
-        //   (randomHue + 60) % 360
-        // }, 60%, 80%))`;
-        const randomBackgroundColor =
-          pastelColors[Math.floor(Math.random() * pastelColors.length)];
-
-        // Determine the text color based on background
-        const textColor = "text-gray-900";
-
-        return (
-          <Card
-            key={category.id}
-            className={cn(
-              "max-w-sm shadow-lg rounded-lg transform transition-all duration-300 hover:scale-105",
-              textColor,
-            )}
-            style={{ backgroundColor: randomBackgroundColor }}
-          >
-            <CardHeader>
-              <CardTitle className="font-bold text-2xl">
-                {category.name}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription>
-                <Link
-                  href={category.externalUrl || ""}
-                  passHref
-                  target="_blank"
-                >
-                  {category.externalUrl}
-                </Link>
-              </CardDescription>
-            </CardContent>
-            <CardFooter>
-              <Button variant="outline" className="w-full">
-                View Details
-              </Button>
-            </CardFooter>
-          </Card>
-        );
-      })}
+      {categories.map((category) => (
+        <Card
+          key={category.id}
+          className={cn(
+            "max-w-sm shadow-lg rounded-lg transform transition-all duration-300 hover:scale-105 text-",
+            textStyle,
+          )}
+          style={{ backgroundColor: randomBackgroundColor }}
+        >
+          <CardHeader>
+            <CardTitle className="font-bold text-2xl">
+              {category.name}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CardDescription>
+              <Link href={category.externalUrl || ""} passHref target="_blank">
+                {category.externalUrl}
+              </Link>
+            </CardDescription>
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" className="w-full">
+              View Details
+            </Button>
+          </CardFooter>
+        </Card>
+      ))}
     </div>
   );
 };
