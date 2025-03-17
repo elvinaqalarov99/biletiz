@@ -28,21 +28,15 @@ const data: {
     icon: ForwardRefExoticComponent<
       Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
     >;
-    items: { title: string; url: string }[];
+    items?: { title: string; url: string }[];
   }[];
 } = {
   user: null,
   navMain: [
     {
-      title: "Settings",
-      url: "#",
+      title: "Categories",
+      url: "/dashboard",
       icon: Bot,
-      items: [
-        {
-          title: "All settings",
-          url: "/dashboard",
-        },
-      ],
     },
   ],
 };
