@@ -8,32 +8,75 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Category } from "@/interfaces/category";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface CategoryListProps {
   categories: Category[];
 }
 
+// Utility function to generate a random hue (0 to 360)
+// const getRandomHue = () => Math.floor(Math.random() * 360);
+
+// Elegant and soft pastel background colors
+const pastelColors = [
+  "hsl(210, 40%, 90%)", // Light Blue
+  "hsl(150, 50%, 85%)", // Soft Green
+  "hsl(35, 80%, 85%)", // Warm Yellow
+  "hsl(320, 50%, 85%)", // Light Purple
+  "hsl(50, 80%, 85%)", // Peachy Orange
+];
+
 const CategoryList = ({ categories }: CategoryListProps) => {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {categories.map((category) => (
-        <Card
-          key={category.id}
-          className="max-w-sm shadow-md bg-white rounded-lg"
-        >
-          <CardHeader>
-            <CardTitle>{category.name}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>{category.externalUrl}</CardDescription>{" "}
-          </CardContent>
-          <CardFooter>
-            <Button variant="outline" className="w-full">
-              View Details
-            </Button>
-          </CardFooter>
-        </Card>
-      ))}
+      {categories.map((category) => {
+        // Generate a random hue for each category card
+        // const randomHue = getRandomHue();
+
+        // Use a gradient background with the random hue
+        // const cardBackground = `linear-gradient(45deg, hsl(${randomHue}, 70%, 75%), hsl(${
+        //   (randomHue + 60) % 360
+        // }, 60%, 80%))`;
+        const randomBackgroundColor =
+          pastelColors[Math.floor(Math.random() * pastelColors.length)];
+
+        // Determine the text color based on background
+        const textColor = "text-gray-900";
+
+        return (
+          <Card
+            key={category.id}
+            className={cn(
+              "max-w-sm shadow-lg rounded-lg transform transition-all duration-300 hover:scale-105",
+              textColor,
+            )}
+            style={{ backgroundColor: randomBackgroundColor }}
+          >
+            <CardHeader>
+              <CardTitle className="font-bold text-2xl">
+                {category.name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                <Link
+                  href={category.externalUrl || ""}
+                  passHref
+                  target="_blank"
+                >
+                  {category.externalUrl}
+                </Link>
+              </CardDescription>
+            </CardContent>
+            <CardFooter>
+              <Button variant="outline" className="w-full">
+                View Details
+              </Button>
+            </CardFooter>
+          </Card>
+        );
+      })}
     </div>
   );
 };
