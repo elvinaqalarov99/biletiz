@@ -27,16 +27,13 @@ export class CreateEventsTable1742234429757 implements MigrationInterface {
             type: "int",
           },
           {
-            name: "category_slug",
-            type: "varchar",
-          },
-          {
             name: "slug",
             type: "varchar",
           },
           {
             name: "age_limit",
-            type: "int",
+            type: "varchar",
+            isNullable: true,
           },
           {
             name: "event_starts_at",
@@ -57,6 +54,7 @@ export class CreateEventsTable1742234429757 implements MigrationInterface {
           {
             name: "upcoming_mode",
             type: "boolean",
+            isNullable: true,
           },
           {
             name: "min_price",
@@ -69,18 +67,22 @@ export class CreateEventsTable1742234429757 implements MigrationInterface {
           {
             name: "poster_url",
             type: "varchar",
+            isNullable: true,
           },
           {
             name: "poster_bg_url",
             type: "varchar",
+            isNullable: true,
           },
           {
             name: "poster_wide_url",
             type: "varchar",
+            isNullable: true,
           },
           {
             name: "poster_wide_bg_url",
             type: "varchar",
+            isNullable: true,
           },
           {
             name: "public_state",
@@ -93,6 +95,7 @@ export class CreateEventsTable1742234429757 implements MigrationInterface {
           {
             name: "search",
             type: "varchar",
+            isNullable: true,
           },
           {
             name: "external_url",

@@ -12,11 +12,11 @@ export class EventVenueEntity {
 
   @ManyToOne(() => EventEntity, (event) => event.venues, { cascade: true })
   @JoinColumn({ name: "event_id" })
-  role: EventEntity;
+  event: EventEntity;
 
   @ManyToOne(() => VenueEntity, (venue) => venue.events, { cascade: true })
   @JoinColumn({ name: "venue_id" })
-  permission: VenueEntity;
+  venue: VenueEntity;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   assignedAt: Date;

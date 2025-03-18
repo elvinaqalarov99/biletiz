@@ -5,7 +5,7 @@ export interface Venue {
   mapLng: number;
   phone: string | null;
   mobile: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
 }

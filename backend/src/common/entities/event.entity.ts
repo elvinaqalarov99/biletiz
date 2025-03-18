@@ -24,8 +24,8 @@ export class EventEntity {
   @Column()
   slug: string;
 
-  @Column()
-  ageLimit: number;
+  @Column({ nullable: true })
+  ageLimit: string;
 
   @Column()
   eventStartsAt: Date;
@@ -39,7 +39,7 @@ export class EventEntity {
   @Column()
   availableTicketsCount: number;
 
-  @Column()
+  @Column({ nullable: true })
   upcomingMode: boolean;
 
   @Column()
@@ -48,16 +48,16 @@ export class EventEntity {
   @Column()
   maxPrice: number;
 
-  @Column()
+  @Column({ nullable: true })
   posterUrl: string;
 
-  @Column()
+  @Column({ nullable: true })
   posterBgUrl: string;
 
-  @Column()
+  @Column({ nullable: true })
   posterWideUrl: string;
 
-  @Column()
+  @Column({ nullable: true })
   posterWideBgUrl: string;
 
   @Column()
@@ -66,19 +66,19 @@ export class EventEntity {
   @Column()
   webViewRotate: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   search: string;
 
-  @Column()
+  @Column({ nullable: true })
   externalUrl: string;
 
-  @Column()
+  @Column({ nullable: true })
   metaTitle: string;
 
-  @Column()
+  @Column({ nullable: true })
   metaDescription: string;
 
-  @Column()
+  @Column({ nullable: true })
   metaKeywords: string;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
@@ -88,7 +88,7 @@ export class EventEntity {
   updatedAt: Date;
 
   @DeleteDateColumn({ type: "timestamp", nullable: true })
-  deletedAt?: Date;
+  deletedAt: Date;
 
   @ManyToOne(() => CategoryEntity, (category) => category.events, {
     cascade: true,

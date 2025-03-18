@@ -8,26 +8,72 @@ import {
   sleep,
 } from "../../common/helper";
 import { CategoryService } from "src/modules/categories/category.service";
+import { VenueService } from "src/modules/venues/venue.service";
+import { EventService } from "src/modules/events/event.service";
+import { In } from "typeorm";
 
 @Injectable()
 export class WorkerService {
   constructor(
     private iTicketApiService: ITicketApiService,
     private categoryService: CategoryService,
+    private venueService: VenueService,
+    private eventService: EventService,
   ) {}
+
+  async saveEvents(events: []) {
+    console.log("Start to save events to db!");
+
+    if (!events.length) {
+      return;
+    }
+
+    for (const event of events) {
+      let updatedEvent: any = keysToCamelCaseDeep(
+        renameKey(event, "id", "externalId"),
+      );
+      const category = await this.categoryService.findOne({
+        externalId: updatedEvent.categoryId,
+      });
+      const venueIds: number[] = updatedEvent.venues.map((venue) => venue.id);
+      const venues = await this.venueService.find({ externalId: In(venueIds) });
+
+      // set relations data, and remove unnecesarry keys
+      updatedEvent.category = category;
+      updatedEvent.venues = venues;
+      updatedEvent = removeKey(updatedEvent, "categoryId");
+      updatedEvent = removeKey(updatedEvent, "categorySlug");
+
+      await this.eventService.upsert(updatedEvent);
+    }
+  }
+
+  async saveVenues(venues: []): Promise<void> {
+    console.log("Start to save venues to db!");
+
+    if (!venues.length) {
+      return;
+    }
+
+    for (const venue of venues) {
+      const updatedVenue: object = keysToCamelCaseDeep(
+        renameKey(venue, "id", "externalId"),
+      );
+      await this.venueService.upsert(updatedVenue);
+    }
+  }
 
   async parseCategories() {
     try {
-      console.log("Start to parse categories");
+      console.log("Start to parse categories!");
 
       const categoriesRes = await this.iTicketApiService.categories();
-      if (categoriesRes !== null && categoriesRes.response.length) {
-        for (let i = 0; i < categoriesRes.response.length; i++) {
-          const category: object = categoriesRes.response[i];
+      const response = categoriesRes?.response;
+      if (response !== null && response.length) {
+        for (const category of response) {
           const updatedCategory: object = keysToCamelCaseDeep(
             removeKey(renameKey(category, "id", "externalId"), "translations"),
           );
-          console.log(updatedCategory);
           await this.categoryService.upsert(updatedCategory);
         }
       } else {
@@ -49,11 +95,18 @@ export class WorkerService {
           console.log(`Start to parse events (page ${page})`);
 
           const eventsRes = await this.iTicketApiService.events(page);
-          if (eventsRes !== null && eventsRes.response.events.data.length) {
-            finished = !eventsRes.response.events.next_page_url;
-            page++;
+          const response = eventsRes?.response;
 
-            // save categories to database
+          if (response && response.events.data.length) {
+            finished = !response.events.next_page_url;
+
+            // save venues to database from first page, no need to save it from all pages
+            if (page === 1) {
+              await this.saveVenues((response.venues as []) ?? []);
+            }
+
+            // save events to database
+            await this.saveEvents((response.events.data as []) ?? []);
           } else {
             console.log(`Events are empty on this page, skipping...!`);
           }
@@ -63,7 +116,10 @@ export class WorkerService {
             error,
           );
         }
-        await sleep(1000);
+
+        page++;
+
+        await sleep(2000);
       } while (!finished && page <= limit);
 
       console.log(`Finished parsing events at page ${page}`);
@@ -78,6 +134,6 @@ export class WorkerService {
     console.log("Cron -> Runs every 1 hour to parse iTickets");
 
     await this.parseCategories();
-    // await this.parseEvents();
+    await this.parseEvents();
   }
 }

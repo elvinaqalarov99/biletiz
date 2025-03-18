@@ -12,6 +12,8 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { ITicketApiModule } from "./integrations/iticket-api/iticket-api.module";
 import { CategoryModule } from "./modules/categories/category.module";
 import { WorkerModule } from "./core/worker/worker.module";
+import { VenueModule } from "./modules/venues/venue.module";
+import { EventModule } from "./modules/events/event.module";
 
 import { AppController } from "./app.controller";
 
@@ -79,6 +81,8 @@ const envFilePath = path.resolve(
     RoleModule,
     PermissionModule,
     CategoryModule,
+    VenueModule,
+    EventModule,
     RbacModule,
     WorkerModule,
     ITicketApiModule,

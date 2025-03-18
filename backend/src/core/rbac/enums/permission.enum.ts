@@ -19,4 +19,10 @@ export enum PermissionEnum {
 
   // categories
   Category_Read = "category_read",
+
+  // venues
+  Venue_Read = "venue_read",
+
+  // events
+  Event_Read = "event_read",
 }

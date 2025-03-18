@@ -59,6 +59,20 @@ export class CreateVenuesTable1742241341829 implements MigrationInterface {
       }),
     );
 
+    // Create pivot table user_roles
+    await queryRunner.query(`
+          CREATE TABLE IF NOT EXISTS "event_venue" (
+            "id" SERIAL NOT NULL,
+            "event_id" integer NOT NULL,
+            "venue_id" integer NOT NULL,
+            "assigned_at" TIMESTAMP NOT NULL DEFAULT now(),
+    
+            CONSTRAINT "PK_event_venue" PRIMARY KEY ("event_id", "venue_id"),
+            CONSTRAINT "FK_event_venue_event" FOREIGN KEY ("event_id") REFERENCES "events"("id") ON DELETE CASCADE,
+            CONSTRAINT "FK_event_venue_venue" FOREIGN KEY ("venue_id") REFERENCES "venues"("id") ON DELETE CASCADE
+          )
+        `);
+
     await queryRunner.query(`
       INSERT INTO "permissions" (name)
         VALUES 
@@ -75,6 +89,7 @@ export class CreateVenuesTable1742241341829 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropTable("event_venue");
     await queryRunner.dropTable("venues");
     await queryRunner.query(`
       DELETE FROM "permissions" WHERE name = 'venue_read';

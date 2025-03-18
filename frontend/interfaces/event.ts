@@ -6,9 +6,9 @@ export interface Event {
   name: string;
   slug: string;
   ageLimit: number;
-  eventStartsAt: Date;
-  eventEndsAt: Date;
-  sellEndsAt: Date;
+  eventStartsAt: string;
+  eventEndsAt: string;
+  sellEndsAt: string;
   availableTicketsCount: number;
   upcomingMode: boolean | null;
   minPrice: number;
@@ -24,9 +24,9 @@ export interface Event {
   metaTitle: string | null;
   metaDescription: string | null;
   metaKeywords: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
   category: Category;
   venues: Venue[];
 }

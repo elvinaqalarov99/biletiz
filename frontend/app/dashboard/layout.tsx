@@ -35,7 +35,7 @@ const data: {
   navMain: [
     {
       title: "Categories",
-      url: "/dashboard",
+      url: "/dashboard/categories",
       icon: Bot,
     },
   ],

@@ -63,9 +63,14 @@ const CategoryList = ({ categories }: CategoryListProps) => {
             </CardDescription>
           </CardContent>
           <CardFooter>
-            <Button variant="outline" className="w-full">
-              View Details
-            </Button>
+            <Link
+              href={`/dashboard/categories/${category.id}`}
+              className="w-full"
+            >
+              <Button variant="outline" className="w-full">
+                View Details
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
       ))}

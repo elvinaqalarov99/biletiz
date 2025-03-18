@@ -21,6 +21,7 @@ export class CategoryService {
   async findOne(data: object): Promise<CategoryEntity | null> {
     return await this.categoryRepository.findOne({
       where: data,
+      relations: ["events"],
     });
   }
 
