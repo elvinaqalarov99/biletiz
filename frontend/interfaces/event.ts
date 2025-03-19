@@ -3,6 +3,7 @@ import { Venue } from "./venue";
 
 export interface Event {
   id: number;
+  externalId: number;
   name: string;
   slug: string;
   ageLimit: number;

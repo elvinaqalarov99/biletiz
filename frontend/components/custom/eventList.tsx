@@ -1,44 +1,27 @@
 import { Card, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Event } from "@/interfaces/event";
 import { humanReadableDate } from "@/utils/helper";
+import { Category } from "@/interfaces/category";
+import { Calendar, MapPin } from "lucide-react";
 
 interface CategoryListProps {
+  category: Category | null;
   events: Event[] | null | undefined;
 }
 
-// Utility function to generate a random hue (0 to 360)
-// const getRandomHue = () => Math.floor(Math.random() * 360);
+const textStyle = "text-white italic font-bold text-lg";
 
-// Elegant and soft pastel background colors
-// const pastelColors = [
-//   "hsl(210, 40%, 90%)", // Light Blue
-//   "hsl(150, 50%, 85%)", // Soft Green
-//   "hsl(35, 80%, 85%)", // Warm Yellow
-//   "hsl(320, 50%, 85%)", // Light Purple
-//   "hsl(50, 80%, 85%)", // Peachy Orange
-// ];
-
-const EventList = ({ events }: CategoryListProps) => {
-  // const [randomBackgroundColor, setRandomBackgroundColor] = useState("");
-  const [textStyle, setTextStyle] = useState("");
-
-  useEffect(() => {
-    // setRandomBackgroundColor(
-    //   pastelColors[Math.floor(Math.random() * pastelColors.length)],
-    // );
-    setTextStyle("text-white italic font-bold");
-  }, []);
-
+const EventList = ({ category, events }: CategoryListProps) => {
   return (
     <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {events?.length ? (
         events?.map((event) => (
           <Link
             key={event.id}
-            href={`/dashboard/events/${event.id}`}
+            href={`https://iticket.az/events/${category?.slug}/${event.slug}`}
+            target="_blank"
             className="w-full"
           >
             <Card
@@ -48,17 +31,34 @@ const EventList = ({ events }: CategoryListProps) => {
               )}
               style={{ backgroundImage: `url(${event.posterBgUrl})` }}
             >
-              <div className="-z-10 absolute inset-0 bg-black opacity-50 rounded-lg"></div>
+              <div className="-z-10 absolute inset-0 bg-black opacity-60 rounded-lg"></div>
 
               <CardHeader>
-                <CardTitle className="font-bold text-2xl">
-                  {event.name}
-                </CardTitle>
+                <CardTitle className="font-bold">{event.name}</CardTitle>
               </CardHeader>
-              <CardFooter className="mt-auto">
-                <span className="text-2xl">
-                  {humanReadableDate(event.eventStartsAt)}
-                </span>
+              <CardFooter className="flex justify-between mt-auto">
+                <div className="flex items-start flex-col">
+                  <div className="flex items-center justify-center">
+                    <Calendar className="mr-2 h-4 w-4" />
+                    {humanReadableDate(event.eventStartsAt)}
+                  </div>
+                  <div className="flex items-center justify-center">
+                    {event.venues[0]?.name ? (
+                      <>
+                        <MapPin className="mr-2 h-4 w-4" />
+                        {event.venues[0].name}
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </div>
+                <div>
+                  {event.minPrice === event.maxPrice
+                    ? event.minPrice
+                    : `from ${event.minPrice}`}{" "}
+                  ₼
+                </div>
               </CardFooter>
             </Card>
           </Link>

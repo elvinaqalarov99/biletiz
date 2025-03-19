@@ -1,28 +1,34 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Ubuntu, Ubuntu_Mono } from "next/font/google";
 import "./globals.css";
 import React from "react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const ubuntuSans = Ubuntu({
+  variable: "--font-ubuntu-sans",
   subsets: ["latin"],
+  weight: "700",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const ubuntuMono = Ubuntu_Mono({
+  variable: "--font-ubuntu-mono",
   subsets: ["latin"],
+  weight: "700",
 });
 
 export const metadata: Metadata = {
-  title: "Setup for Next.js + Nest.js + Nginx",
-  description: "Setup for Next.js + Nest.js + Nginx dockerized",
+  title:
+    "BiletIz.az - One in a hand solution for tracking your fav event types",
+  description:
+    "Setup fav category to get new event notifications easily and with one click",
 };
 
-export default function RootLayout({children}: Readonly<{ children: React.ReactNode; }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${ubuntuSans.variable} ${ubuntuMono.variable} antialiased`}
       >
         {children}
       </body>
