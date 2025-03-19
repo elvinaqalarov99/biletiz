@@ -28,7 +28,7 @@ export default function CategoryItem() {
 
   return (
     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-      <h1 className="text-3xl">{category?.name}</h1>
+      <h1 className="text-3xl mb-10">{category?.name}</h1>
       <EventList category={category} events={category?.events} />
     </div>
   );
