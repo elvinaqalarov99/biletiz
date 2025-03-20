@@ -6,6 +6,7 @@ import { persist } from "zustand/middleware";
 interface UserStore {
   user: User | null;
   isLoading: boolean;
+  setUser: (user: User) => void;
   fetchUser: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -31,6 +32,8 @@ export const useUserStore = create<UserStore>()(
           set({ user: null, isLoading: false });
         }
       },
+
+      setUser: (user: User) => set({ user }),
 
       logout: async () => {
         set({ user: null, isLoading: true });

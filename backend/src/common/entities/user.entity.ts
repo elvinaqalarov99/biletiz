@@ -74,7 +74,7 @@ export class UserEntity {
   })
   roles: RoleEntity[];
 
-  @ManyToMany(() => CategoryEntity, (category) => category.userPreferences)
+  @ManyToMany(() => CategoryEntity, (category) => category.preferredBy)
   @JoinTable({
     name: "user_category_preferences", // Pivot table name
     joinColumn: { name: "user_id", referencedColumnName: "id" },

@@ -27,8 +27,5 @@ export enum PermissionEnum {
   Event_Read = "event_read",
 
   // user-category-preferences
-  UserCategory_Preference_Create = "user_category_preference_create",
-  UserCategory_Preference_Read = "user_category_preference_read",
-  UserCategory_Preference_Update = "user_category_preference_update",
-  UserCategory_Preference_Delete = "user_category_preference_delete",
+  UserCategory_Preference_Toggle = "user_category_preference_toggle",
 }

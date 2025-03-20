@@ -1,3 +1,5 @@
+import { Category } from "./category";
+
 export interface User {
   id: number;
   email: string;
@@ -15,4 +17,5 @@ export interface User {
   isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  categoryPreferences: Category[];
 }

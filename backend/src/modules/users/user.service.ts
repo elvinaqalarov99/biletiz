@@ -7,12 +7,15 @@ import { RoleService } from "../roles/role.service";
 import { RoleEntity } from "src/common/entities/role.entity";
 import * as argon2 from "argon2";
 import { UserUpdateDto } from "./dto/user-update.dto";
+import { CategoryEntity } from "src/common/entities/category.entity";
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
+    @InjectRepository(CategoryEntity)
+    private categoryRepository: Repository<CategoryEntity>,
     private roleService: RoleService,
   ) {}
 
@@ -23,7 +26,7 @@ export class UserService {
   async findOne(data: object): Promise<UserEntity | null> {
     return await this.userRepository.findOne({
       where: data, // Or use other criteria like email, etc.
-      relations: ["roles", "roles.permissions"],
+      relations: ["roles", "roles.permissions", "categoryPreferences"],
     });
   }
 
@@ -78,5 +81,38 @@ export class UserService {
     }
 
     return await this.userRepository.remove(user);
+  }
+
+  async toggleCategoryPreference(
+    userId: number,
+    categoryId: number,
+  ): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ["categoryPreferences"],
+    });
+
+    const category = await this.categoryRepository.findOne({
+      where: { id: categoryId },
+    });
+
+    if (!user || !category)
+      throw new NotFoundException("User or Category not found");
+
+    const isPreferenced = user.categoryPreferences.some(
+      (preference) => preference.id === categoryId,
+    );
+
+    if (isPreferenced) {
+      user.categoryPreferences = user.categoryPreferences.filter(
+        (category) => category.id !== categoryId,
+      );
+    } else {
+      user.categoryPreferences.push(category);
+    }
+
+    await this.userRepository.save(user);
+
+    return user;
   }
 }

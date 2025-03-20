@@ -21,19 +21,13 @@ export class CreateUserCategoryPreferences1742496881843
     await queryRunner.query(`
         INSERT INTO "permissions" (name)
           VALUES 
-              ('user_category_preference_create'),
-              ('user_category_preference_read'),
-              ('user_category_preference_update'),
-              ('user_category_preference_delete');
+              ('user_category_preference_toggle');
   
         INSERT INTO "role_permission" (role_id, permission_id)
           SELECT r.id, p.id
           FROM roles r
           JOIN permissions p ON p.name IN (
-              'user_category_preference_create',
-              'user_category_preference_read',
-              'user_category_preference_update',
-              'user_category_preference_delete'
+              'user_category_preference_toggle'
           )
           WHERE r.name IN ('super_admin', 'admin', 'user');
       `);
@@ -43,10 +37,7 @@ export class CreateUserCategoryPreferences1742496881843
     await queryRunner.dropTable("user_category_preferences");
     await queryRunner.query(`
         DELETE FROM "permissions" WHERE name IN (
-            'user_category_preference_create', 
-            'user_category_preference_read',
-            'user_category_preference_update',
-            'user_category_preference_delete'
+            'user_category_preference_toggle'
         );
     `);
   }

@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Req,
   UseGuards,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
@@ -18,6 +19,8 @@ import { RbacGuard } from "../../core/rbac/guards/rbac.guard";
 import { Permissions } from "../../core/rbac/decorators/permission.decorator";
 import { PermissionEnum } from "../../core/rbac/enums/permission.enum";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { Request } from "express";
+import { UserEntity } from "../../common/entities/user.entity";
 
 @Controller("users")
 @UseGuards(JwtAuthGuard, RbacGuard)
@@ -53,5 +56,16 @@ export class UserController {
   @Permissions(PermissionEnum.User_Delete)
   delete(@Param("id", ParseIntPipe) id: number) {
     return this.userService.deleteUser(id);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post("category-preference/:id")
+  @Permissions(PermissionEnum.UserCategory_Preference_Toggle)
+  toggleCategoryPreference(
+    @Req() req: Request,
+    @Param("id", ParseIntPipe) categoryId: number,
+  ) {
+    const user = req.user as UserEntity;
+    return this.userService.toggleCategoryPreference(user.id, categoryId);
   }
 }

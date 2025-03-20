@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardHeader,
@@ -11,33 +13,48 @@ import { Category } from "@/interfaces/category";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useUserStore } from "@/store/userStore";
+import { Heart, HeartOff } from "lucide-react"; // Importing lucide-react icons
+import { apiService } from "@/utils/apiService";
 
 interface CategoryListProps {
   categories: Category[];
 }
 
-// Utility function to generate a random hue (0 to 360)
-// const getRandomHue = () => Math.floor(Math.random() * 360);
-
 // Elegant and soft pastel background colors
 const pastelColors = [
   "hsl(210, 40%, 90%)", // Light Blue
-  "hsl(150, 50%, 85%)", // Soft Green
-  "hsl(35, 80%, 85%)", // Warm Yellow
-  "hsl(320, 50%, 85%)", // Light Purple
-  "hsl(50, 80%, 85%)", // Peachy Orange
 ];
 
 const CategoryList = ({ categories }: CategoryListProps) => {
   const [randomBackgroundColor, setRandomBackgroundColor] = useState("");
   const [textStyle, setTextStyle] = useState("");
+  const { user, setUser } = useUserStore();
+  const categoryPreferencesIds = user?.categoryPreferences.map(
+    (category) => category.id,
+  );
+
+  // Toggle function for heart icon
+  const toggleFavorite = async (categoryId: number) => {
+    try {
+      const res = await apiService
+        .getAxiosInstance()
+        .post(`users/category-preference/${categoryId}`);
+
+      if (res.status === 200) {
+        setUser(res.data);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     setRandomBackgroundColor(
       pastelColors[Math.floor(Math.random() * pastelColors.length)],
     );
     setTextStyle("text-gray-900 italic");
-  }, []);
+  }, [user]);
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -45,11 +62,23 @@ const CategoryList = ({ categories }: CategoryListProps) => {
         <Card
           key={category.id}
           className={cn(
-            "max-w-sm shadow-lg rounded-lg transform transition-all duration-300 hover:scale-105 text-",
+            "relative max-w-sm shadow-lg rounded-lg transform transition-all duration-300 hover:scale-105 text-",
             textStyle,
           )}
           style={{ backgroundColor: randomBackgroundColor }}
         >
+          {/* Favorite icon */}
+          <span
+            className="absolute top-2 right-2 text-xl cursor-pointer text-red-500"
+            onClick={() => toggleFavorite(category.id)}
+          >
+            {categoryPreferencesIds?.includes(category.id) ? (
+              <Heart className="text-red-500" /> // Red heart when filled
+            ) : (
+              <HeartOff className="text-gray-500" /> // Gray heart when empty
+            )}
+          </span>
+
           <CardHeader>
             <CardTitle className="font-bold text-2xl">
               {category.name}

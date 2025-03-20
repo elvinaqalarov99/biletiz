@@ -42,5 +42,5 @@ export class CategoryEntity {
   events: Event[];
 
   @ManyToMany(() => UserEntity, (user) => user.categoryPreferences)
-  userPreferences: UserEntity[];
+  preferredBy: UserEntity[];
 }
