@@ -2,7 +2,6 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ScheduleModule } from "@nestjs/schedule";
 import { UserModule } from "./modules/users/user.module";
 import { RoleModule } from "./modules/roles/role.module";
 import { ThrottlerModule } from "@nestjs/throttler";
@@ -11,9 +10,10 @@ import { PermissionModule } from "./modules/permissions/permission.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { ITicketApiModule } from "./integrations/iticket-api/iticket-api.module";
 import { CategoryModule } from "./modules/categories/category.module";
-import { WorkerModule } from "./core/worker/worker.module";
+import { CronModule } from "./core/cron/cron.module";
 import { VenueModule } from "./modules/venues/venue.module";
 import { EventModule } from "./modules/events/event.module";
+import { QueueModule } from "./core/queue/queue.module";
 
 import { AppController } from "./app.controller";
 
@@ -22,6 +22,7 @@ import { AppService } from "./app.service";
 import appConfig, { ENV_DEV } from "./common/config/app.config";
 import databaseConfig from "./common/config/database.config";
 import jwtConfig from "./common/config/jwt.config";
+import redisConfig from "./common/config/redis.config";
 
 import * as path from "path";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
@@ -33,10 +34,9 @@ const envFilePath = path.resolve(
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       envFilePath: envFilePath,
-      load: [appConfig, databaseConfig, jwtConfig], // Load multiple configs
+      load: [appConfig, databaseConfig, jwtConfig, redisConfig], // Load multiple configs
       isGlobal: true, // Makes env variables available globally
     }),
     ThrottlerModule.forRootAsync({
@@ -53,7 +53,7 @@ const envFilePath = path.resolve(
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      inject: [ConfigService], // ✅ Inject ConfigModule
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: "postgres",
         host: configService.get<string>("database.host"),
@@ -84,7 +84,8 @@ const envFilePath = path.resolve(
     VenueModule,
     EventModule,
     RbacModule,
-    WorkerModule,
+    QueueModule,
+    CronModule,
     ITicketApiModule,
   ],
   controllers: [AppController],

@@ -22,6 +22,7 @@ services:
     restart: on-failure:5
     depends_on:
       - postgres
+      - redis
     env_file:
       - ./backend/.env.development
     ports:
@@ -64,8 +65,21 @@ services:
     networks:
       - app_network
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app_network
+
 volumes:
   postgres_data:
+  redis_data:
+    driver: local
 
 networks:
   app_network:

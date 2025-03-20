@@ -1,19 +1,19 @@
-import { Injectable } from "@nestjs/common";
-import { Cron } from "@nestjs/schedule";
-import { ITicketApiService } from "../../integrations/iticket-api/iticket-api.service";
+import { Processor, Process } from "@nestjs/bull";
+import { Job } from "bull";
 import {
   keysToCamelCaseDeep,
   removeKey,
   renameKey,
   sleep,
-} from "../../common/helper";
+} from "src/common/helper";
+import { ITicketApiService } from "src/integrations/iticket-api/iticket-api.service";
 import { CategoryService } from "src/modules/categories/category.service";
-import { VenueService } from "src/modules/venues/venue.service";
 import { EventService } from "src/modules/events/event.service";
+import { VenueService } from "src/modules/venues/venue.service";
 import { In } from "typeorm";
 
-@Injectable()
-export class WorkerService {
+@Processor("iticket-queue")
+export class IticketProcessor {
   constructor(
     private iTicketApiService: ITicketApiService,
     private categoryService: CategoryService,
@@ -21,46 +21,13 @@ export class WorkerService {
     private eventService: EventService,
   ) {}
 
-  async saveEvents(events: []) {
-    console.log("Start to save events to db!");
-
-    if (!events.length) {
-      return;
-    }
-
-    for (const event of events) {
-      let updatedEvent: any = keysToCamelCaseDeep(
-        renameKey(event, "id", "externalId"),
-      );
-      const category = await this.categoryService.findOne({
-        externalId: updatedEvent.categoryId,
-      });
-      const venueIds: number[] = updatedEvent.venues.map((venue) => venue.id);
-      const venues = await this.venueService.find({ externalId: In(venueIds) });
-
-      // set relations data, and remove unnecesarry keys
-      updatedEvent.category = category;
-      updatedEvent.venues = venues;
-      updatedEvent = removeKey(updatedEvent, "categoryId");
-      updatedEvent = removeKey(updatedEvent, "categorySlug");
-
-      await this.eventService.upsert(updatedEvent);
-    }
-  }
-
-  async saveVenues(venues: []): Promise<void> {
-    console.log("Start to save venues to db!");
-
-    if (!venues.length) {
-      return;
-    }
-
-    for (const venue of venues) {
-      const updatedVenue: object = keysToCamelCaseDeep(
-        renameKey(venue, "id", "externalId"),
-      );
-      await this.venueService.upsert(updatedVenue);
-    }
+  @Process("parse-iticket")
+  async handleIticketJob(job: Job<any>) {
+    console.log(`Processing job ${job.id}:`);
+    // Simulate some background work
+    await this.parseCategories();
+    await this.parseEvents();
+    console.log(`Job ${job.id} completed`);
   }
 
   async parseCategories() {
@@ -128,12 +95,45 @@ export class WorkerService {
     }
   }
 
-  // Cron job to make an API call every 1 hour
-  @Cron("0 * * * *")
-  async handleCron(): Promise<void> {
-    console.log("Cron -> Runs every 1 hour to parse iTickets");
+  async saveEvents(events: []) {
+    console.log("Start to save events to db!");
 
-    await this.parseCategories();
-    await this.parseEvents();
+    if (!events.length) {
+      return;
+    }
+
+    for (const event of events) {
+      let updatedEvent: any = keysToCamelCaseDeep(
+        renameKey(event, "id", "externalId"),
+      );
+      const category = await this.categoryService.findOne({
+        externalId: updatedEvent.categoryId,
+      });
+      const venueIds: number[] = updatedEvent.venues.map((venue) => venue.id);
+      const venues = await this.venueService.find({ externalId: In(venueIds) });
+
+      // set relations data, and remove unnecesarry keys
+      updatedEvent.category = category;
+      updatedEvent.venues = venues;
+      updatedEvent = removeKey(updatedEvent, "categoryId");
+      updatedEvent = removeKey(updatedEvent, "categorySlug");
+
+      await this.eventService.upsert(updatedEvent);
+    }
+  }
+
+  async saveVenues(venues: []): Promise<void> {
+    console.log("Start to save venues to db!");
+
+    if (!venues.length) {
+      return;
+    }
+
+    for (const venue of venues) {
+      const updatedVenue: object = keysToCamelCaseDeep(
+        renameKey(venue, "id", "externalId"),
+      );
+      await this.venueService.upsert(updatedVenue);
+    }
   }
 }

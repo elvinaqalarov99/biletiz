@@ -25,7 +25,10 @@
     "typeorm:show": "npx typeorm-ts-node-commonjs migration:show -d src/data-source.ts"
   },
   "dependencies": {
+    "@bull-board/api": "^6.7.10",
+    "@bull-board/nestjs": "^6.7.10",
     "@nestjs/axios": "^4.0.0",
+    "@nestjs/bull": "^11.0.2",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.0",
     "@nestjs/core": "^11.0.1",
@@ -37,6 +40,7 @@
     "@nestjs/typeorm": "^11.0.0",
     "@types/passport-jwt": "^4.0.1",
     "argon2": "^0.41.1",
+    "bull": "^4.16.5",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cookie-parser": "^1.4.7",
@@ -45,6 +49,7 @@
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.13.1",
+    "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20",
