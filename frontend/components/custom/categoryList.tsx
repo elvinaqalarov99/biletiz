@@ -54,7 +54,7 @@ const CategoryList = ({ categories }: CategoryListProps) => {
       pastelColors[Math.floor(Math.random() * pastelColors.length)],
     );
     setTextStyle("text-gray-900 italic");
-  }, [user]);
+  }, []);
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
