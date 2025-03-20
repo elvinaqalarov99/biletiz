@@ -13,11 +13,15 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import React, { ForwardRefExoticComponent, RefAttributes } from "react";
-import { UserProvider, useUser } from "@/providers/UserProvider";
+import React, {
+  ForwardRefExoticComponent,
+  RefAttributes,
+  useEffect,
+} from "react";
 import Loading from "@/components/custom/loading";
 import { User } from "@/interfaces/user";
 import { Bot, LucideProps } from "lucide-react";
+import { useUserStore } from "@/store/userStore";
 
 // This is sample data.
 const data: {
@@ -46,17 +50,13 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <UserProvider>
-      <InnerDashboardLayout>{children}</InnerDashboardLayout>
-    </UserProvider>
-  );
-}
+  const { user, isLoading, fetchUser } = useUserStore();
 
-function InnerDashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useUser();
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
-  if (loading) return <Loading />;
+  if (isLoading) return <Loading />;
 
   data.user = user as User;
 

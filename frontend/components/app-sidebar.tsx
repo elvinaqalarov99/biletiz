@@ -32,8 +32,6 @@ export function AppSidebar({
   data,
   ...props
 }: AppSidebarProps & React.ComponentProps<typeof Sidebar>) {
-  data.user = data.user as User;
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>{/*add custom header logo*/}</SidebarHeader>
@@ -41,7 +39,7 @@ export function AppSidebar({
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
