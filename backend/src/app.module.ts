@@ -26,6 +26,7 @@ import redisConfig from "./common/config/redis.config";
 
 import * as path from "path";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import { UserCategoryPreferencesModule } from "./modules/user-category-preferences/user-category-preferences.module";
 
 const envFilePath = path.resolve(
   __dirname,
@@ -83,6 +84,7 @@ const envFilePath = path.resolve(
     CategoryModule,
     VenueModule,
     EventModule,
+    UserCategoryPreferencesModule,
     RbacModule,
     QueueModule,
     CronModule,

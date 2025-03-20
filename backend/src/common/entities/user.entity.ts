@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { RoleEntity } from "./role.entity";
 import { Exclude } from "class-transformer";
+import { CategoryEntity } from "./category.entity";
 
 @Entity("users")
 export class UserEntity {
@@ -72,6 +73,14 @@ export class UserEntity {
     inverseJoinColumn: { name: "role_id", referencedColumnName: "id" },
   })
   roles: RoleEntity[];
+
+  @ManyToMany(() => CategoryEntity, (category) => category.userPreferences)
+  @JoinTable({
+    name: "user_category_preferences", // Pivot table name
+    joinColumn: { name: "user_id", referencedColumnName: "id" },
+    inverseJoinColumn: { name: "category_id", referencedColumnName: "id" },
+  })
+  categoryPreferences: CategoryEntity[];
 
   @Exclude()
   @DeleteDateColumn()

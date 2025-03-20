@@ -2,10 +2,12 @@ import {
   Column,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { EventEntity } from "./event.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity("categories")
 export class CategoryEntity {
@@ -38,4 +40,7 @@ export class CategoryEntity {
 
   @OneToMany(() => EventEntity, (event) => event.category)
   events: Event[];
+
+  @ManyToMany(() => UserEntity, (user) => user.categoryPreferences)
+  userPreferences: UserEntity[];
 }
