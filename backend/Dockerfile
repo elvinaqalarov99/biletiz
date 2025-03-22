@@ -19,4 +19,5 @@ RUN npm install -g @nestjs/cli
 
 RUN npm prune --production  # Remove development dependencies
 EXPOSE 5001
+
 CMD ["npm", "run", "start"]

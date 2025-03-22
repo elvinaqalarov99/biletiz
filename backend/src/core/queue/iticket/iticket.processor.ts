@@ -24,7 +24,6 @@ export class IticketProcessor {
   @Process("parse-iticket")
   async handleIticketJob(job: Job<any>) {
     console.log(`Processing job ${job.id}:`);
-    // Simulate some background work
     await this.parseCategories();
     await this.parseEvents();
     console.log(`Job ${job.id} completed`);
@@ -38,9 +37,10 @@ export class IticketProcessor {
       const response = categoriesRes?.response;
       if (response !== null && response.length) {
         for (const category of response) {
-          const updatedCategory: object = keysToCamelCaseDeep(
+          const updatedCategory: any = keysToCamelCaseDeep(
             removeKey(renameKey(category, "id", "externalId"), "translations"),
           );
+          if (updatedCategory?.externalUrl) continue; // skip categories that have external url
           await this.categoryService.upsert(updatedCategory);
         }
       } else {

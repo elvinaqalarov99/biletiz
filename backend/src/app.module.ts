@@ -26,6 +26,7 @@ import redisConfig from "./common/config/redis.config";
 
 import * as path from "path";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
+import { GatewayModule } from "./gateway/gateway.module";
 
 const envFilePath = path.resolve(
   __dirname,
@@ -87,6 +88,7 @@ const envFilePath = path.resolve(
     QueueModule,
     CronModule,
     ITicketApiModule,
+    GatewayModule,
   ],
   controllers: [AppController],
   providers: [AppService],

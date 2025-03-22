@@ -24,7 +24,6 @@ export const useUserStore = create<UserStore>()(
 
           if (response.data.statusCode !== 200)
             throw new Error("Failed to fetch user");
-          console.log(response.data);
           const data: User = response.data.user;
           set({ user: data, isLoading: false });
         } catch (error) {

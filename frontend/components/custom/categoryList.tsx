@@ -1,21 +1,14 @@
 "use client";
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-  CardDescription,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Category } from "@/interfaces/category";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/store/userStore";
-import { Heart, HeartOff } from "lucide-react"; // Importing lucide-react icons
+import { Heart } from "lucide-react";
 import { apiService } from "@/utils/apiService";
+import { motion } from "framer-motion";
 
 interface CategoryListProps {
   categories: Category[];
@@ -59,49 +52,45 @@ const CategoryList = ({ categories }: CategoryListProps) => {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map((category) => (
-        <Card
+        <motion.div
           key={category.id}
-          className={cn(
-            "relative max-w-sm shadow-lg rounded-lg transform transition-all duration-300 hover:scale-105 text-",
-            textStyle,
-          )}
-          style={{ backgroundColor: randomBackgroundColor }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="relative"
         >
-          {/* Favorite icon */}
-          <span
-            className="absolute top-2 right-2 text-xl cursor-pointer text-red-500"
-            onClick={() => toggleFavorite(category.id)}
+          <Link
+            href={`/dashboard/categories/${category.id}`}
+            className="w-full"
           >
-            {categoryPreferencesIds?.includes(category.id) ? (
-              <Heart className="text-red-500" /> // Red heart when filled
-            ) : (
-              <HeartOff className="text-gray-500" /> // Gray heart when empty
-            )}
-          </span>
-
-          <CardHeader>
-            <CardTitle className="font-bold text-2xl">
-              {category.name}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <CardDescription>
-              <Link href={category.externalUrl || ""} passHref target="_blank">
-                {category.externalUrl}
-              </Link>
-            </CardDescription>
-          </CardContent>
-          <CardFooter>
-            <Link
-              href={`/dashboard/categories/${category.id}`}
-              className="w-full"
+            <Card
+              className={cn(
+                "relative max-w-lg w-full backdrop-blur-md transition-all rounded-xl",
+                textStyle,
+              )}
+              style={{ backgroundColor: randomBackgroundColor }}
             >
-              <Button variant="outline" className="w-full">
-                View Details
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
+              <CardContent className="p-8 flex flex-col">
+                <h3 className="text-2xl font-semibold text-gray-900 italic">
+                  {category.name}
+                </h3>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleFavorite(category.id);
+                  }}
+                  className="absolute top-4 right-4"
+                >
+                  {categoryPreferencesIds?.includes(category.id) ? (
+                    <Heart className="text-red-500 fill-red-500" />
+                  ) : (
+                    <Heart className="text-gray-400 hover:text-red-500" />
+                  )}
+                </button>
+              </CardContent>
+            </Card>
+          </Link>
+        </motion.div>
       ))}
     </div>
   );

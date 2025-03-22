@@ -25,7 +25,7 @@ export class CategoryService {
     });
   }
 
-  async upsert(data: object): Promise<InsertResult> {
-    return this.categoryRepository.upsert(data, ["externalId"]);
+  async upsert(data: any): Promise<InsertResult> {
+    return this.categoryRepository.upsert(data as object, ["externalId"]);
   }
 }
