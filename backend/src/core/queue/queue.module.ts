@@ -11,6 +11,8 @@ import { EventModule } from "src/modules/events/event.module";
 import { BullBoardModule } from "@bull-board/nestjs";
 import { ExpressAdapter } from "@bull-board/express";
 import { BullAdapter } from "@bull-board/api/bullAdapter";
+import { UserModule } from "src/modules/users/user.module";
+import { GatewayModule } from "src/gateway/gateway.module";
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { BullAdapter } from "@bull-board/api/bullAdapter";
     CategoryModule,
     VenueModule,
     EventModule,
+    UserModule,
+    GatewayModule,
     BullModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -6,11 +6,13 @@ import {
   renameKey,
   sleep,
 } from "src/common/helper";
+import { WebSocketGateway } from "src/gateway/websocket.gateway";
 import { ITicketApiService } from "src/integrations/iticket-api/iticket-api.service";
 import { CategoryService } from "src/modules/categories/category.service";
 import { EventService } from "src/modules/events/event.service";
+import { UserService } from "src/modules/users/user.service";
 import { VenueService } from "src/modules/venues/venue.service";
-import { In } from "typeorm";
+import { In, MoreThan } from "typeorm";
 
 @Processor("iticket-queue")
 export class IticketProcessor {
@@ -19,13 +21,16 @@ export class IticketProcessor {
     private categoryService: CategoryService,
     private venueService: VenueService,
     private eventService: EventService,
+    private userService: UserService,
+    private gateway: WebSocketGateway,
   ) {}
 
   @Process("parse-iticket")
   async handleIticketJob(job: Job<any>) {
     console.log(`Processing job ${job.id}:`);
-    await this.parseCategories();
-    await this.parseEvents();
+    //await this.parseCategories();
+    //await this.parseEvents();
+    await this.manageNotifications();
     console.log(`Job ${job.id} completed`);
   }
 
@@ -134,6 +139,30 @@ export class IticketProcessor {
         renameKey(venue, "id", "externalId"),
       );
       await this.venueService.upsert(updatedVenue);
+    }
+  }
+
+  async manageNotifications() {
+    console.log("Managing new events' notifications...");
+    try {
+      const users = await this.userService.allByCategoryPreferences();
+
+      for (const user of users) {
+        const categoryPreferences = user.categoryPreferences;
+        const events = await this.eventService.all(
+          {
+            category: In(categoryPreferences.map((category) => category.id)),
+            createdAt: MoreThan(new Date(Date.now() - 60 * 60 * 1000)),
+          },
+          ["category", "venues"],
+        );
+        this.gateway.emitNewEvents(events);
+      }
+    } catch (error) {
+      console.log(
+        "Error occurred while trying to manage notifications->",
+        error,
+      );
     }
   }
 }

@@ -8,7 +8,7 @@ import { Calendar, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface CategoryListProps {
-  category: Category | null;
+  category?: Category | null;
   events: Event[] | null | undefined;
 }
 
@@ -28,7 +28,9 @@ const EventList = ({ category, events }: CategoryListProps) => {
           >
             <Link
               key={event.id}
-              href={`https://iticket.az/events/${category?.slug}/${event.slug}`}
+              href={`https://iticket.az/events/${
+                category?.slug ?? event?.category?.slug
+              }/${event.slug}`}
               target="_blank"
               className="w-full"
             >

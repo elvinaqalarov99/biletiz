@@ -19,6 +19,28 @@ export class UserService {
     private roleService: RoleService,
   ) {}
 
+  async all(
+    data: object = {},
+    relations: string[] = [],
+  ): Promise<UserEntity[] | []> {
+    return (
+      (await this.userRepository.find({
+        where: data,
+        relations: relations,
+      })) ?? []
+    );
+  }
+
+  async allByCategoryPreferences(): Promise<UserEntity[] | []> {
+    const users = await this.userRepository
+      .createQueryBuilder("user")
+      .innerJoinAndSelect("user.categoryPreferences", "categoryPreference")
+      .where("user.isActive = :isActive", { isActive: true })
+      .getMany();
+
+    return users;
+  }
+
   async hashPassword(password: string): Promise<string> {
     return (await argon2.hash(password)).toString(); // Hash the password
   }

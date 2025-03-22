@@ -12,10 +12,14 @@ export class EventService {
     private readonly eventRepository: Repository<EventEntity>,
   ) {}
 
-  async all(data: object = {}): Promise<EventEntity[] | []> {
+  async all(
+    data: object = {},
+    relations: string[] = [],
+  ): Promise<EventEntity[] | []> {
     return (
       (await this.eventRepository.find({
         where: data,
+        relations: relations,
       })) ?? []
     );
   }

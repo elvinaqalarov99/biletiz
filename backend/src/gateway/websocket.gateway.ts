@@ -7,6 +7,7 @@ import {
   OnGatewayDisconnect,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
+import { EventEntity } from "src/common/entities/event.entity";
 
 @NestWebSocketGateway({
   cors: {
@@ -18,21 +19,30 @@ export class WebSocketGateway
 {
   @WebSocketServer() server: Server;
 
+  private readonly connections: Map<string, Socket> = new Map();
+
   afterInit() {
     console.log("Initialized");
   }
 
   handleConnection(client: Socket) {
-    console.log(`Client id: ${client.id} connected`);
+    if (!this.connections.has(client.id)) {
+      this.connections.set(client.id, client);
+    }
   }
 
   handleDisconnect(client: Socket) {
-    console.log(`Cliend id:${client.data.name} disconnected`);
+    if (this.connections.has(client.id)) {
+      this.connections.delete(client.id);
+    }
+  }
+
+  emitNewEvents(events: EventEntity[]) {
+    this.server.emit("newRelatedEvents", events);
   }
 
   @SubscribeMessage("ping")
   handleMessage(client: Socket, payload: string): void {
-    console.log(`Message from ${client.id}: ${payload}`);
     this.server.emit("pong", {
       message: `${client.data.name}: ${payload}`,
       id: client.id,

@@ -20,7 +20,7 @@ import React, {
 } from "react";
 import Loading from "@/components/custom/loading";
 import { User } from "@/interfaces/user";
-import { Bot, LucideProps } from "lucide-react";
+import { Bell, Bot, LucideProps } from "lucide-react";
 import { useUserStore } from "@/store/userStore";
 
 // This is sample data.
@@ -41,6 +41,11 @@ const data: {
       title: "Categories",
       url: "/dashboard/categories",
       icon: Bot,
+    },
+    {
+      title: "Notifications",
+      url: "/dashboard/notifications",
+      icon: Bell,
     },
   ],
 };
