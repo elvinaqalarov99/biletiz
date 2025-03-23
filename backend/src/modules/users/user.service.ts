@@ -36,6 +36,7 @@ export class UserService {
     const users = await this.userRepository
       .createQueryBuilder("user")
       .innerJoinAndSelect("user.categoryPreferences", "categoryPreference")
+      .leftJoinAndSelect("user.notifications", "notification")
       .where("user.isActive = :isActive", { isActive: true })
       .getMany();
 
@@ -54,6 +55,8 @@ export class UserService {
         "roles.permissions",
         "categoryPreferences",
         "notifications",
+        "notifications.category",
+        "notifications.venues",
       ],
     });
   }
@@ -62,7 +65,7 @@ export class UserService {
     user: UserEntity,
     notifications: EventEntity[],
   ): Promise<UserEntity> {
-    user.notifications = [...user.notifications, ...notifications];
+    user.notifications.push(...notifications);
 
     return await this.userRepository.save(user);
   }

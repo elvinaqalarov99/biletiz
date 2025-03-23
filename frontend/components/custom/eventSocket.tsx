@@ -10,8 +10,8 @@ interface Message {
 }
 
 const EventSocket = () => {
-  const [events, setEvents] = useState<Event[]>([]);
   const { user } = useUserStore();
+  const [events, setEvents] = useState<Event[]>(user?.notifications ?? []);
 
   useEffect(() => {
     const socketIo = io("ws://localhost:5001");
@@ -26,13 +26,13 @@ const EventSocket = () => {
     });
 
     socketIo.on("newRelatedEvents", (events: Event[]) => {
-      setEvents(events);
+      setEvents((_events) => [..._events, ...events]);
     });
 
     return () => {
       socketIo.disconnect();
     };
-  }, [user, events]);
+  }, [user]);
 
   return (
     <div className="flex flex-col float-start">

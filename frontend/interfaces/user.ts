@@ -1,4 +1,5 @@
 import { Category } from "./category";
+import { Event } from "./event";
 
 export interface User {
   id: number;
@@ -18,4 +19,5 @@ export interface User {
   createdAt?: string;
   updatedAt?: string;
   categoryPreferences: Category[];
+  notifications: Event[];
 }

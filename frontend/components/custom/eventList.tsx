@@ -46,7 +46,7 @@ const EventList = ({ category, events }: CategoryListProps) => {
                 <CardHeader>
                   <CardTitle className="font-bold">{event.name}</CardTitle>
                 </CardHeader>
-                <CardFooter className="flex justify-around mt-auto">
+                <CardFooter className="flex justify-between mt-auto">
                   <div className="flex items-start flex-col">
                     <div className="flex items-center justify-center">
                       <Calendar className="mr-2 h-4 w-4" />
