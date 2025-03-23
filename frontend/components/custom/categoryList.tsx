@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { useUserStore } from "@/store/userStore";
 import { Heart } from "lucide-react";
 import { apiService } from "@/utils/apiService";
-import { motion } from "framer-motion";
 
 interface CategoryListProps {
   categories: Category[];
@@ -52,45 +51,38 @@ const CategoryList = ({ categories }: CategoryListProps) => {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map((category) => (
-        <motion.div
+        <Link
           key={category.id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="relative"
+          href={`/dashboard/categories/${category.id}`}
+          className="w-full"
         >
-          <Link
-            href={`/dashboard/categories/${category.id}`}
-            className="w-full"
+          <Card
+            className={cn(
+              "relative max-w-lg w-full backdrop-blur-md transition-all rounded-xl",
+              textStyle,
+            )}
+            style={{ backgroundColor: randomBackgroundColor }}
           >
-            <Card
-              className={cn(
-                "relative max-w-lg w-full backdrop-blur-md transition-all rounded-xl",
-                textStyle,
-              )}
-              style={{ backgroundColor: randomBackgroundColor }}
-            >
-              <CardContent className="p-8 flex flex-col">
-                <h3 className="text-2xl font-semibold text-gray-900 italic">
-                  {category.name}
-                </h3>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toggleFavorite(category.id);
-                  }}
-                  className="absolute top-4 right-4"
-                >
-                  {categoryPreferencesIds?.includes(category.id) ? (
-                    <Heart className="text-red-500 fill-red-500" />
-                  ) : (
-                    <Heart className="text-gray-400 hover:text-red-500" />
-                  )}
-                </button>
-              </CardContent>
-            </Card>
-          </Link>
-        </motion.div>
+            <CardContent className="p-8 flex flex-col">
+              <h3 className="text-2xl font-semibold text-gray-900 italic">
+                {category.name}
+              </h3>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  toggleFavorite(category.id);
+                }}
+                className="absolute top-4 right-4"
+              >
+                {categoryPreferencesIds?.includes(category.id) ? (
+                  <Heart className="text-red-500 fill-red-500" />
+                ) : (
+                  <Heart className="text-gray-400 hover:text-red-500" />
+                )}
+              </button>
+            </CardContent>
+          </Card>
+        </Link>
       ))}
     </div>
   );

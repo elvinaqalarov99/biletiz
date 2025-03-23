@@ -5,7 +5,6 @@ import { Event } from "@/interfaces/event";
 import { humanReadableDate } from "@/utils/helper";
 import { Category } from "@/interfaces/category";
 import { Calendar, MapPin } from "lucide-react";
-import { motion } from "framer-motion";
 
 interface CategoryListProps {
   category?: Category | null;
@@ -19,60 +18,52 @@ const EventList = ({ category, events }: CategoryListProps) => {
     <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {events?.length ? (
         events?.map((event) => (
-          <motion.div
+          <Link
             key={event.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="relative"
+            href={`https://iticket.az/events/${
+              category?.slug ?? event?.category?.slug
+            }/${event.slug}`}
+            target="_blank"
+            className="w-full"
           >
-            <Link
-              key={event.id}
-              href={`https://iticket.az/events/${
-                category?.slug ?? event?.category?.slug
-              }/${event.slug}`}
-              target="_blank"
-              className="w-full"
+            <Card
+              className={cn(
+                "background-img shadow-lg rounded-lg transform transition-all duration-300 hover:scale-105 relative h-[350px] flex flex-col",
+                textStyle,
+              )}
+              style={{ backgroundImage: `url(${event.posterBgUrl})` }}
             >
-              <Card
-                className={cn(
-                  "background-img shadow-lg rounded-lg transform transition-all duration-300 hover:scale-105 relative h-[350px] flex flex-col",
-                  textStyle,
-                )}
-                style={{ backgroundImage: `url(${event.posterBgUrl})` }}
-              >
-                <div className="-z-10 absolute inset-0 bg-black opacity-50 rounded-lg"></div>
+              <div className="-z-10 absolute inset-0 bg-black opacity-50 rounded-lg"></div>
 
-                <CardHeader>
-                  <CardTitle className="font-bold">{event.name}</CardTitle>
-                </CardHeader>
-                <CardFooter className="flex justify-between mt-auto">
-                  <div className="flex items-start flex-col">
-                    <div className="flex items-center justify-center">
-                      <Calendar className="mr-2 h-4 w-4" />
-                      {humanReadableDate(event.eventStartsAt)}
-                    </div>
-                    <div className="flex items-center justify-center">
-                      {event.venues[0]?.name ? (
-                        <>
-                          <MapPin className="mr-2 h-4 w-4" />
-                          {event.venues[0].name}
-                        </>
-                      ) : (
-                        ""
-                      )}
-                    </div>
+              <CardHeader>
+                <CardTitle className="font-bold">{event.name}</CardTitle>
+              </CardHeader>
+              <CardFooter className="flex justify-between mt-auto">
+                <div className="flex items-start flex-col">
+                  <div className="flex items-center justify-center">
+                    <Calendar className="mr-2 h-4 w-4" />
+                    {humanReadableDate(event.eventStartsAt)}
                   </div>
-                  <div>
-                    {event.minPrice === event.maxPrice
-                      ? event.minPrice
-                      : `${event.minPrice}+`}{" "}
-                    ₼
+                  <div className="flex items-center justify-center">
+                    {event.venues[0]?.name ? (
+                      <>
+                        <MapPin className="mr-2 h-4 w-4" />
+                        {event.venues[0].name}
+                      </>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                </CardFooter>
-              </Card>
-            </Link>
-          </motion.div>
+                </div>
+                <div>
+                  {event.minPrice === event.maxPrice
+                    ? event.minPrice
+                    : `${event.minPrice}+`}{" "}
+                  ₼
+                </div>
+              </CardFooter>
+            </Card>
+          </Link>
         ))
       ) : (
         <h1>NO EVENTS RIGHT NOW, PLEASE CHECK LATER...</h1>
