@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { CategoryEntity } from "./category.entity";
 import { VenueEntity } from "./venue.entity";
+import { UserEntity } from "./user.entity";
 
 @Entity("events")
 export class EventEntity {
@@ -102,4 +103,7 @@ export class EventEntity {
     inverseJoinColumn: { name: "venue_id", referencedColumnName: "id" },
   })
   venues: VenueEntity[];
+
+  @ManyToMany(() => UserEntity, (user) => user.notifications)
+  notifications: UserEntity[];
 }

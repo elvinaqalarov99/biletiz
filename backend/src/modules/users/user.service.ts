@@ -8,6 +8,7 @@ import { RoleEntity } from "src/common/entities/role.entity";
 import * as argon2 from "argon2";
 import { UserUpdateDto } from "./dto/user-update.dto";
 import { CategoryEntity } from "src/common/entities/category.entity";
+import { EventEntity } from "src/common/entities/event.entity";
 
 @Injectable()
 export class UserService {
@@ -47,9 +48,23 @@ export class UserService {
 
   async findOne(data: object): Promise<UserEntity | null> {
     return await this.userRepository.findOne({
-      where: data, // Or use other criteria like email, etc.
-      relations: ["roles", "roles.permissions", "categoryPreferences"],
+      where: data,
+      relations: [
+        "roles",
+        "roles.permissions",
+        "categoryPreferences",
+        "notifications",
+      ],
     });
+  }
+
+  async saveNotifications(
+    user: UserEntity,
+    notifications: EventEntity[],
+  ): Promise<UserEntity> {
+    user.notifications = [...user.notifications, ...notifications];
+
+    return await this.userRepository.save(user);
   }
 
   async createUser(userData: UserLoginDto): Promise<UserEntity> {

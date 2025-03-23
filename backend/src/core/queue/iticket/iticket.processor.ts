@@ -156,6 +156,7 @@ export class IticketProcessor {
           },
           ["category", "venues"],
         );
+        await this.userService.saveNotifications(user, events);
         this.gateway.emitNewEvents(events);
       }
     } catch (error) {

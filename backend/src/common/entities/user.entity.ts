@@ -11,6 +11,7 @@ import {
 import { RoleEntity } from "./role.entity";
 import { Exclude } from "class-transformer";
 import { CategoryEntity } from "./category.entity";
+import { EventEntity } from "./event.entity";
 
 @Entity("users")
 export class UserEntity {
@@ -68,7 +69,7 @@ export class UserEntity {
 
   @ManyToMany(() => RoleEntity, (role) => role.users)
   @JoinTable({
-    name: "user_role", // Pivot table name
+    name: "user_role",
     joinColumn: { name: "user_id", referencedColumnName: "id" },
     inverseJoinColumn: { name: "role_id", referencedColumnName: "id" },
   })
@@ -76,11 +77,19 @@ export class UserEntity {
 
   @ManyToMany(() => CategoryEntity, (category) => category.preferredBy)
   @JoinTable({
-    name: "user_category_preferences", // Pivot table name
+    name: "user_category_preferences",
     joinColumn: { name: "user_id", referencedColumnName: "id" },
     inverseJoinColumn: { name: "category_id", referencedColumnName: "id" },
   })
   categoryPreferences: CategoryEntity[];
+
+  @ManyToMany(() => EventEntity, (event) => event.notifications)
+  @JoinTable({
+    name: "notifications",
+    joinColumn: { name: "user_id", referencedColumnName: "id" },
+    inverseJoinColumn: { name: "event_id", referencedColumnName: "id" },
+  })
+  notifications: EventEntity[];
 
   @Exclude()
   @DeleteDateColumn()
