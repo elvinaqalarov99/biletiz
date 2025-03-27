@@ -1,25 +1,25 @@
-import { NestFactory } from "@nestjs/core";
+import { NestFactory } from '@nestjs/core';
 import {
   BadRequestException,
   HttpStatus,
   ValidationPipe,
-} from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
-import { AppModule } from "./app.module";
+import { AppModule } from './app.module';
 
-import { ENV_DEV } from "./common/config/app.config";
+import { ENV_DEV } from './common/config/app.config';
 
-import { PostgresExceptionFilter } from "./common/exceptions/filters/postgres-exception.filter";
-import { HTTPExceptionFilter } from "./common/exceptions/filters/http-exception.filter";
+import { PostgresExceptionFilter } from './common/exceptions/filters/postgres-exception.filter';
+import { HTTPExceptionFilter } from './common/exceptions/filters/http-exception.filter';
 
-import { TransformInterceptor } from "./common/interceptors/transform.interceptor";
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 
-import * as dotenv from "dotenv";
-import * as path from "path";
-import * as cookieParser from "cookie-parser";
-import * as passport from "passport";
-import helmet from "helmet";
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+import * as cookieParser from 'cookie-parser';
+import * as passport from 'passport';
+import helmet from 'helmet';
 
 // Load environment variables manually
 dotenv.config({
@@ -45,14 +45,14 @@ async function bootstrap() {
             "'self'",
             "'unsafe-inline'",
             "'unsafe-eval'",
-            "cdn.vercel-insights.com",
+            'cdn.vercel-insights.com',
           ],
           styleSrc: ["'self'", "'unsafe-inline'"],
-          imgSrc: ["'self'", "data:"],
+          imgSrc: ["'self'", 'data:'],
         },
       },
-      crossOriginResourcePolicy: { policy: "same-origin" },
-      referrerPolicy: { policy: "no-referrer" },
+      crossOriginResourcePolicy: { policy: 'same-origin' },
+      referrerPolicy: { policy: 'no-referrer' },
       crossOriginEmbedderPolicy: false, // May interfere with cross-origin loading
     }),
   );
@@ -62,13 +62,13 @@ async function bootstrap() {
 
   // apply cors
   app.enableCors({
-    origin: [configService.get<string>("app.corsOrigins")], // Allow frontend (Next.js)
-    methods: ["GET", "PUT", "POST", "DELETE"],
+    origin: [configService.get<string>('app.corsOrigins')], // Allow frontend (Next.js)
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
     credentials: true, // Allow cookies & authentication headers
   });
 
   // set global prefix for all routes
-  app.setGlobalPrefix("api");
+  app.setGlobalPrefix('api');
 
   // apply global validation pipe to handle request validation
   app.useGlobalPipes(
@@ -84,7 +84,7 @@ async function bootstrap() {
 
         return new BadRequestException({
           message: response,
-          error: "Bad Request",
+          error: 'Bad Request',
           statusCode: HttpStatus.BAD_REQUEST,
         });
       },
@@ -101,9 +101,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformInterceptor());
 
   // Access environment variables using ConfigService
-  const port = configService.get<number>("app.port") || 5001;
+  const port = configService.get<number>('app.port') || 5001;
 
-  await app.listen(port, "0.0.0.0"); // Listening on all network interfaces
+  await app.listen(port, '0.0.0.0'); // Listening on all network interfaces
   console.log(
     `🚀 Server running on http://localhost:${port} (ENV: ${process.env.NODE_ENV})`,
   );

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateUserCategoryPreferences1742496881843
   implements MigrationInterface
@@ -34,7 +34,7 @@ export class CreateUserCategoryPreferences1742496881843
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("user_category_preferences");
+    await queryRunner.dropTable('user_category_preferences');
     await queryRunner.query(`
         DELETE FROM "permissions" WHERE name IN (
             'user_category_preference_toggle'

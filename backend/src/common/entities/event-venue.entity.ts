@@ -1,8 +1,8 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
-import { EventEntity } from "./event.entity";
-import { VenueEntity } from "./venue.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { EventEntity } from './event.entity';
+import { VenueEntity } from './venue.entity';
 
-@Entity("event_venue")
+@Entity('event_venue')
 export class EventVenueEntity {
   @PrimaryColumn()
   eventId: number;
@@ -11,13 +11,13 @@ export class EventVenueEntity {
   venueId: number;
 
   @ManyToOne(() => EventEntity, (event) => event.venues, { cascade: true })
-  @JoinColumn({ name: "event_id" })
+  @JoinColumn({ name: 'event_id' })
   event: EventEntity;
 
   @ManyToOne(() => VenueEntity, (venue) => venue.events, { cascade: true })
-  @JoinColumn({ name: "venue_id" })
+  @JoinColumn({ name: 'venue_id' })
   venue: VenueEntity;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   assignedAt: Date;
 }

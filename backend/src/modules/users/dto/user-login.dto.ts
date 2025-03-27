@@ -6,7 +6,7 @@ import {
   IsArray,
   IsOptional,
   IsDateString,
-} from "class-validator";
+} from 'class-validator';
 
 export class UserLoginDto {
   @IsString()
@@ -15,10 +15,10 @@ export class UserLoginDto {
 
   @IsString()
   @MinLength(6, {
-    message: "Password is too short. Minimum length is 6 characters",
+    message: 'Password is too short. Minimum length is 6 characters',
   })
   @MaxLength(20, {
-    message: "Password is too long. Maximum length is 20 characters",
+    message: 'Password is too long. Maximum length is 20 characters',
   })
   password: string;
 

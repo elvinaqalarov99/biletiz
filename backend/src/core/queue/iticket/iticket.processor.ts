@@ -1,20 +1,20 @@
-import { Processor, Process } from "@nestjs/bull";
-import { Job } from "bull";
+import { Processor, Process } from '@nestjs/bull';
+import { Job } from 'bull';
 import {
   keysToCamelCaseDeep,
   removeKey,
   renameKey,
   sleep,
-} from "src/common/helper";
-import { WebSocketGateway } from "src/gateway/websocket.gateway";
-import { ITicketApiService } from "src/integrations/iticket-api/iticket-api.service";
-import { CategoryService } from "src/modules/categories/category.service";
-import { EventService } from "src/modules/events/event.service";
-import { UserService } from "src/modules/users/user.service";
-import { VenueService } from "src/modules/venues/venue.service";
-import { In, MoreThan } from "typeorm";
+} from 'src/common/helper';
+import { WebSocketGateway } from 'src/gateway/websocket.gateway';
+import { ITicketApiService } from 'src/integrations/iticket-api/iticket-api.service';
+import { CategoryService } from 'src/modules/categories/category.service';
+import { EventService } from 'src/modules/events/event.service';
+import { UserService } from 'src/modules/users/user.service';
+import { VenueService } from 'src/modules/venues/venue.service';
+import { In, MoreThan } from 'typeorm';
 
-@Processor("iticket-queue")
+@Processor('iticket-queue')
 export class IticketProcessor {
   constructor(
     private iTicketApiService: ITicketApiService,
@@ -25,7 +25,7 @@ export class IticketProcessor {
     private gateway: WebSocketGateway,
   ) {}
 
-  @Process("parse-iticket")
+  @Process('parse-iticket')
   async handleIticketJob(job: Job<any>) {
     console.log(`Processing job ${job.id}:`);
     //await this.parseCategories();
@@ -36,14 +36,14 @@ export class IticketProcessor {
 
   async parseCategories() {
     try {
-      console.log("Start to parse categories!");
+      console.log('Start to parse categories!');
 
       const categoriesRes = await this.iTicketApiService.categories();
       const response = categoriesRes?.response;
       if (response !== null && response.length) {
         for (const category of response) {
           const updatedCategory: any = keysToCamelCaseDeep(
-            removeKey(renameKey(category, "id", "externalId"), "translations"),
+            removeKey(renameKey(category, 'id', 'externalId'), 'translations'),
           );
           if (updatedCategory?.externalUrl) continue; // skip categories that have external url
           await this.categoryService.upsert(updatedCategory);
@@ -101,7 +101,7 @@ export class IticketProcessor {
   }
 
   async saveEvents(events: []) {
-    console.log("Start to save events to db!");
+    console.log('Start to save events to db!');
 
     if (!events.length) {
       return;
@@ -109,7 +109,7 @@ export class IticketProcessor {
 
     for (const event of events) {
       let updatedEvent: any = keysToCamelCaseDeep(
-        renameKey(event, "id", "externalId"),
+        renameKey(event, 'id', 'externalId'),
       );
       const category = await this.categoryService.findOne({
         externalId: updatedEvent.categoryId,
@@ -120,15 +120,15 @@ export class IticketProcessor {
       // set relations data, and remove unnecesarry keys
       updatedEvent.category = category;
       updatedEvent.venues = venues;
-      updatedEvent = removeKey(updatedEvent, "categoryId");
-      updatedEvent = removeKey(updatedEvent, "categorySlug");
+      updatedEvent = removeKey(updatedEvent, 'categoryId');
+      updatedEvent = removeKey(updatedEvent, 'categorySlug');
 
       await this.eventService.upsert(updatedEvent);
     }
   }
 
   async saveVenues(venues: []): Promise<void> {
-    console.log("Start to save venues to db!");
+    console.log('Start to save venues to db!');
 
     if (!venues.length) {
       return;
@@ -136,7 +136,7 @@ export class IticketProcessor {
 
     for (const venue of venues) {
       const updatedVenue: object = keysToCamelCaseDeep(
-        renameKey(venue, "id", "externalId"),
+        renameKey(venue, 'id', 'externalId'),
       );
       await this.venueService.upsert(updatedVenue);
     }
@@ -154,14 +154,14 @@ export class IticketProcessor {
             category: In(categoryPreferences.map((category) => category.id)),
             createdAt: MoreThan(new Date(Date.now() - 60 * 60 * 1000)),
           },
-          ["category", "venues"],
+          ['category', 'venues'],
         );
         await this.userService.saveNotifications(user, events);
         this.gateway.emitNewEvents(events);
       }
     } catch (error) {
       console.log(
-        "Error occurred while trying to manage notifications->",
+        'Error occurred while trying to manage notifications->',
         error,
       );
     }

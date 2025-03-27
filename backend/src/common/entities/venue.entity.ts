@@ -4,10 +4,10 @@ import {
   Entity,
   ManyToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { EventEntity } from "./event.entity";
+} from 'typeorm';
+import { EventEntity } from './event.entity';
 
-@Entity("venues")
+@Entity('venues')
 export class VenueEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -30,13 +30,13 @@ export class VenueEntity {
   @Column({ nullable: true })
   mobile?: string;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deletedAt?: Date;
 
   @ManyToMany(() => EventEntity, (event) => event.venues)

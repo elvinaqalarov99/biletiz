@@ -5,10 +5,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
-import { RolePermissionEntity } from "./role-permission.entity";
+} from 'typeorm';
+import { RolePermissionEntity } from './role-permission.entity';
 
-@Entity("permissions")
+@Entity('permissions')
 export class PermissionEntity {
   @PrimaryGeneratedColumn()
   id: number;

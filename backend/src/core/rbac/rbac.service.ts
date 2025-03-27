@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { UserEntity } from "src/common/entities/user.entity";
+import { Injectable } from '@nestjs/common';
+import { UserEntity } from 'src/common/entities/user.entity';
 
 @Injectable()
 export class RbacService {

@@ -1,53 +1,53 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateCategoriesTable1742241331583 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "categories",
+        name: 'categories',
         columns: [
           {
-            name: "id",
-            type: "int",
+            name: 'id',
+            type: 'int',
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: "increment",
+            generationStrategy: 'increment',
           },
           {
-            name: "external_id",
-            type: "int",
+            name: 'external_id',
+            type: 'int',
             isUnique: true,
           },
           {
-            name: "name",
-            type: "varchar",
+            name: 'name',
+            type: 'varchar',
           },
           {
-            name: "slug",
-            type: "varchar",
+            name: 'slug',
+            type: 'varchar',
           },
           {
-            name: "ordering",
-            type: "int4",
+            name: 'ordering',
+            type: 'int4',
           },
           {
-            name: "external_url",
-            type: "varchar",
+            name: 'external_url',
+            type: 'varchar',
             isNullable: true,
           },
           {
-            name: "created_at",
-            type: "timestamp",
-            default: "now()",
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'now()',
           },
           {
-            name: "updated_at",
-            type: "timestamp",
-            default: "now()",
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'now()',
           },
           {
-            name: "deleted_at",
-            type: "timestamp",
+            name: 'deleted_at',
+            type: 'timestamp',
             isNullable: true,
           },
         ],
@@ -70,7 +70,7 @@ export class CreateCategoriesTable1742241331583 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("categories");
+    await queryRunner.dropTable('categories');
     await queryRunner.query(`
       DELETE FROM "permissions" WHERE name = 'category_read';
     `);

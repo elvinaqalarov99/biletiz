@@ -6,14 +6,14 @@ import {
   Param,
   ParseIntPipe,
   UseGuards,
-} from "@nestjs/common";
-import { RbacGuard } from "../../core/rbac/guards/rbac.guard";
-import { Permissions } from "../../core/rbac/decorators/permission.decorator";
-import { PermissionEnum } from "../../core/rbac/enums/permission.enum";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { EventService } from "./event.service";
+} from '@nestjs/common';
+import { RbacGuard } from '../../core/rbac/guards/rbac.guard';
+import { Permissions } from '../../core/rbac/decorators/permission.decorator';
+import { PermissionEnum } from '../../core/rbac/enums/permission.enum';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { EventService } from './event.service';
 
-@Controller("events")
+@Controller('events')
 @UseGuards(JwtAuthGuard, RbacGuard)
 export class EventController {
   constructor(private eventService: EventService) {}
@@ -26,9 +26,9 @@ export class EventController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Get(":id")
+  @Get(':id')
   @Permissions(PermissionEnum.Event_Read)
-  read(@Param("id", ParseIntPipe) id: number) {
+  read(@Param('id', ParseIntPipe) id: number) {
     return this.eventService.findOne({ id });
   }
 }

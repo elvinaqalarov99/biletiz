@@ -1,5 +1,5 @@
-import { ArgumentsHost, ExceptionFilter } from "@nestjs/common";
-import { Response, Request } from "express";
+import { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
+import { Response, Request } from 'express';
 
 export abstract class AbstractExceptionFilter implements ExceptionFilter {
   // Abstract method to handle the exception

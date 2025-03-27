@@ -4,7 +4,7 @@ import {
   IsOptional,
   IsArray,
   IsInt,
-} from "class-validator";
+} from 'class-validator';
 
 export class RoleCreateDto {
   @IsString()

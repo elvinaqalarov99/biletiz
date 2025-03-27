@@ -1,12 +1,12 @@
 // Migration to run on very first project setup to load data
 // Do not run it if you already have a data!!!
 
-import { MigrationInterface, QueryRunner } from "typeorm";
-import * as argon2 from "argon2";
+import { MigrationInterface, QueryRunner } from 'typeorm';
+import * as argon2 from 'argon2';
 
 export class CreateRBACData1739547174729 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    const hashedPassword = (await argon2.hash("admin123")).toString();
+    const hashedPassword = (await argon2.hash('admin123')).toString();
     await queryRunner.query(`
         INSERT INTO "users" (id, email, password)
         VALUES (1, 'super_admin@gmail.com', '${hashedPassword}');

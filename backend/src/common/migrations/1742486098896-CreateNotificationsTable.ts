@@ -3,7 +3,7 @@ import {
   QueryRunner,
   Table,
   TableForeignKey,
-} from "typeorm";
+} from 'typeorm';
 
 export class CreateNotificationsTable1742486098896
   implements MigrationInterface
@@ -11,37 +11,37 @@ export class CreateNotificationsTable1742486098896
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "notifications",
+        name: 'notifications',
         columns: [
           {
-            name: "id",
-            type: "int",
+            name: 'id',
+            type: 'int',
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: "increment",
+            generationStrategy: 'increment',
           },
           {
-            name: "user_id",
-            type: "int",
+            name: 'user_id',
+            type: 'int',
           },
           {
-            name: "event_id",
-            type: "int",
+            name: 'event_id',
+            type: 'int',
           },
           {
-            name: "is_read",
-            type: "boolean",
+            name: 'is_read',
+            type: 'boolean',
             default: false,
           },
           {
-            name: "created_at",
-            type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
-            name: "updated_at",
-            type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
           },
         ],
       }),
@@ -49,30 +49,30 @@ export class CreateNotificationsTable1742486098896
 
     // Add the foreign key relationship from 'post.user_id' to 'user.id'
     await queryRunner.createForeignKey(
-      "notifications",
+      'notifications',
       new TableForeignKey({
-        name: "fk_notifications_user_id",
-        columnNames: ["user_id"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "users",
-        onDelete: "CASCADE",
+        name: 'fk_notifications_user_id',
+        columnNames: ['user_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'users',
+        onDelete: 'CASCADE',
       }),
     );
 
     // Add the foreign key relationship from 'post.user_id' to 'user.id'
     await queryRunner.createForeignKey(
-      "notifications",
+      'notifications',
       new TableForeignKey({
-        name: "fk_notifications_event_id",
-        columnNames: ["event_id"],
-        referencedColumnNames: ["id"],
-        referencedTableName: "events",
-        onDelete: "CASCADE",
+        name: 'fk_notifications_event_id',
+        columnNames: ['event_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'events',
+        onDelete: 'CASCADE',
       }),
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("notifications");
+    await queryRunner.dropTable('notifications');
   }
 }

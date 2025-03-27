@@ -1,11 +1,11 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { PassportStrategy } from "@nestjs/passport";
-import { ExtractJwt, Strategy } from "passport-jwt";
-import { JwtPayload } from "./interfaces/jwt-payload.interface";
-import { UserService } from "../users/user.service";
-import { UserEntity } from "../../common/entities/user.entity";
-import { ConfigService } from "@nestjs/config";
-import { Request } from "express";
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { UserService } from '../users/user.service';
+import { UserEntity } from '../../common/entities/user.entity';
+import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -13,11 +13,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     configService: ConfigService,
     private userService: UserService,
   ) {
-    const jwtSecret = configService.get<string>("jwt.secret");
+    const jwtSecret = configService.get<string>('jwt.secret');
 
     if (!jwtSecret) {
       throw new Error(
-        "JWT_SECRET is not defined in the environment variables!",
+        'JWT_SECRET is not defined in the environment variables!',
       );
     }
 

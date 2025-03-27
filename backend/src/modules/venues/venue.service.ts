@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { VenueEntity } from "src/common/entities/venue.entity";
-import { InsertResult, Repository } from "typeorm";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { VenueEntity } from 'src/common/entities/venue.entity';
+import { InsertResult, Repository } from 'typeorm';
 
 @Injectable()
 export class VenueService {
@@ -31,6 +31,6 @@ export class VenueService {
   }
 
   async upsert(data: object): Promise<InsertResult> {
-    return this.venueRepository.upsert(data, ["externalId"]);
+    return this.venueRepository.upsert(data, ['externalId']);
   }
 }

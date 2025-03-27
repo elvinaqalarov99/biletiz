@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { RoleEntity } from "src/common/entities/role.entity";
-import { Repository } from "typeorm";
-import { RoleCreateDto } from "./dto/role-create.dto";
-import { PermissionService } from "../permissions/permission.service";
-import { PermissionEntity } from "src/common/entities/permission.entity";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { RoleEntity } from 'src/common/entities/role.entity';
+import { Repository } from 'typeorm';
+import { RoleCreateDto } from './dto/role-create.dto';
+import { PermissionService } from '../permissions/permission.service';
+import { PermissionEntity } from 'src/common/entities/permission.entity';
 
 @Injectable()
 export class RoleService {
@@ -18,7 +18,7 @@ export class RoleService {
     return (
       (await this.roleRepository.find({
         where: data,
-        relations: ["permissions"],
+        relations: ['permissions'],
       })) ?? []
     );
   }
@@ -26,7 +26,7 @@ export class RoleService {
   async findOne(data: object): Promise<RoleEntity | null> {
     return await this.roleRepository.findOne({
       where: data, // Or use other criteria like email, etc.
-      relations: ["permissions"],
+      relations: ['permissions'],
     });
   }
 

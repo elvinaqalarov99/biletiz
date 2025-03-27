@@ -1,14 +1,14 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { UserEntity } from "src/common/entities/user.entity";
-import { In, Repository } from "typeorm";
-import { UserLoginDto } from "./dto/user-login.dto";
-import { RoleService } from "../roles/role.service";
-import { RoleEntity } from "src/common/entities/role.entity";
-import * as argon2 from "argon2";
-import { UserUpdateDto } from "./dto/user-update.dto";
-import { CategoryEntity } from "src/common/entities/category.entity";
-import { EventEntity } from "src/common/entities/event.entity";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/common/entities/user.entity';
+import { In, Repository } from 'typeorm';
+import { UserLoginDto } from './dto/user-login.dto';
+import { RoleService } from '../roles/role.service';
+import { RoleEntity } from 'src/common/entities/role.entity';
+import * as argon2 from 'argon2';
+import { UserUpdateDto } from './dto/user-update.dto';
+import { CategoryEntity } from 'src/common/entities/category.entity';
+import { EventEntity } from 'src/common/entities/event.entity';
 
 @Injectable()
 export class UserService {
@@ -34,10 +34,10 @@ export class UserService {
 
   async allByCategoryPreferences(): Promise<UserEntity[] | []> {
     const users = await this.userRepository
-      .createQueryBuilder("user")
-      .innerJoinAndSelect("user.categoryPreferences", "categoryPreference")
-      .leftJoinAndSelect("user.notifications", "notification")
-      .where("user.isActive = :isActive", { isActive: true })
+      .createQueryBuilder('user')
+      .innerJoinAndSelect('user.categoryPreferences', 'categoryPreference')
+      .leftJoinAndSelect('user.notifications', 'notification')
+      .where('user.isActive = :isActive', { isActive: true })
       .getMany();
 
     return users;
@@ -51,12 +51,12 @@ export class UserService {
     return await this.userRepository.findOne({
       where: data,
       relations: [
-        "roles",
-        "roles.permissions",
-        "categoryPreferences",
-        "notifications",
-        "notifications.category",
-        "notifications.venues",
+        'roles',
+        'roles.permissions',
+        'categoryPreferences',
+        'notifications',
+        'notifications.category',
+        'notifications.venues',
       ],
     });
   }
@@ -129,7 +129,7 @@ export class UserService {
   ): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ["categoryPreferences"],
+      relations: ['categoryPreferences'],
     });
 
     const category = await this.categoryRepository.findOne({
@@ -137,7 +137,7 @@ export class UserService {
     });
 
     if (!user || !category)
-      throw new NotFoundException("User or Category not found");
+      throw new NotFoundException('User or Category not found');
 
     const isPreferenced = user.categoryPreferences.some(
       (preference) => preference.id === categoryId,

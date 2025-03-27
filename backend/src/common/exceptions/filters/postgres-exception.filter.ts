@@ -1,13 +1,13 @@
-import { Catch, HttpStatus } from "@nestjs/common";
-import { QueryFailedError } from "typeorm";
-import { Response } from "express";
-import { AbstractExceptionFilter } from "./abstract-exception.filter";
+import { Catch, HttpStatus } from '@nestjs/common';
+import { QueryFailedError } from 'typeorm';
+import { Response } from 'express';
+import { AbstractExceptionFilter } from './abstract-exception.filter';
 
 @Catch(QueryFailedError)
 export class PostgresExceptionFilter extends AbstractExceptionFilter {
   handleException(exception: QueryFailedError, response: Response): void {
     const statusCode = HttpStatus.BAD_REQUEST;
-    let errorMessage = "There is an error, please try again with valid data";
+    let errorMessage = 'There is an error, please try again with valid data';
 
     // Access the `driverError` and ensure it's cast correctly
     const driverError = exception.driverError as {

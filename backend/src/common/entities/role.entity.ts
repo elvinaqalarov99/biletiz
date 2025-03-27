@@ -7,16 +7,16 @@ import {
   OneToMany,
   JoinTable,
   ManyToMany,
-} from "typeorm";
-import { UserRoleEntity } from "./user-role.entity";
-import { Exclude } from "class-transformer";
-import { PermissionEntity } from "./permission.entity";
+} from 'typeorm';
+import { UserRoleEntity } from './user-role.entity';
+import { Exclude } from 'class-transformer';
+import { PermissionEntity } from './permission.entity';
 
-@Entity("roles")
+@Entity('roles')
 export class RoleEntity {
-  static readonly SUPER_ADMIN_ROLE: string = "super_admin";
-  static readonly ADMIN_ROLE: string = "admin";
-  static readonly USER_ROLE: string = "user";
+  static readonly SUPER_ADMIN_ROLE: string = 'super_admin';
+  static readonly ADMIN_ROLE: string = 'admin';
+  static readonly USER_ROLE: string = 'user';
 
   @PrimaryGeneratedColumn()
   id: number;
@@ -44,9 +44,9 @@ export class RoleEntity {
 
   @ManyToMany(() => PermissionEntity, (permission) => permission.roles)
   @JoinTable({
-    name: "role_permission", // Pivot table name
-    joinColumn: { name: "role_id", referencedColumnName: "id" },
-    inverseJoinColumn: { name: "permission_id", referencedColumnName: "id" },
+    name: 'role_permission', // Pivot table name
+    joinColumn: { name: 'role_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'permission_id', referencedColumnName: 'id' },
   })
   permissions: PermissionEntity[];
 }

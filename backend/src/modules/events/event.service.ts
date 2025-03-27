@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { EventEntity } from "src/common/entities/event.entity";
-import { VenueEntity } from "src/common/entities/venue.entity";
-import { DataSource, InsertResult, QueryRunner, Repository } from "typeorm";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { EventEntity } from 'src/common/entities/event.entity';
+import { VenueEntity } from 'src/common/entities/venue.entity';
+import { DataSource, InsertResult, QueryRunner, Repository } from 'typeorm';
 
 @Injectable()
 export class EventService {
@@ -40,7 +40,7 @@ export class EventService {
         EventEntity,
         data as object,
         {
-          conflictPaths: ["externalId"],
+          conflictPaths: ['externalId'],
           skipUpdateIfNoValuesChanged: true,
         },
       );
@@ -53,7 +53,7 @@ export class EventService {
 
       return upsertRes;
     } catch (error) {
-      console.error("Error saving events, rolling back...", error);
+      console.error('Error saving events, rolling back...', error);
       await queryRunner.rollbackTransaction();
     } finally {
       // Release queryRunner connection
@@ -72,7 +72,7 @@ export class EventService {
       // Fetch currently linked venues to prevent duplicates
       const existingVenues = await queryRunner.manager
         .createQueryBuilder()
-        .relation(EventEntity, "venues")
+        .relation(EventEntity, 'venues')
         .of(eventId)
         .loadMany();
 
@@ -89,7 +89,7 @@ export class EventService {
       if (newVenues.length > 0) {
         await queryRunner.manager
           .createQueryBuilder()
-          .relation(EventEntity, "venues")
+          .relation(EventEntity, 'venues')
           .of(eventId)
           .add(newVenues);
       }

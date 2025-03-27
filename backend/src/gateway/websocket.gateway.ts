@@ -5,13 +5,13 @@ import {
   OnGatewayInit,
   OnGatewayConnection,
   OnGatewayDisconnect,
-} from "@nestjs/websockets";
-import { Server, Socket } from "socket.io";
-import { EventEntity } from "src/common/entities/event.entity";
+} from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
+import { EventEntity } from 'src/common/entities/event.entity';
 
 @NestWebSocketGateway({
   cors: {
-    origin: "*",
+    origin: '*',
   },
 })
 export class WebSocketGateway
@@ -22,7 +22,7 @@ export class WebSocketGateway
   private readonly connections: Map<string, Socket> = new Map();
 
   afterInit() {
-    console.log("Initialized");
+    console.log('Initialized');
   }
 
   handleConnection(client: Socket) {
@@ -38,21 +38,21 @@ export class WebSocketGateway
   }
 
   emitNewEvents(events: EventEntity[]) {
-    this.server.emit("newRelatedEvents", events);
+    this.server.emit('newRelatedEvents', events);
   }
 
-  @SubscribeMessage("ping")
+  @SubscribeMessage('ping')
   handleMessage(client: Socket, payload: string): void {
-    this.server.emit("pong", {
+    this.server.emit('pong', {
       message: `${client.data.name}: ${payload}`,
       id: client.id,
     });
   }
 
-  @SubscribeMessage("setName")
+  @SubscribeMessage('setName')
   handleName(client: Socket, payload: string): void {
     client.data.name = payload;
-    this.server.emit("nameSet", {
+    this.server.emit('nameSet', {
       message: `${client.data.name} is set to ${client.id}`,
       id: client.id,
     });

@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { CategoryEntity } from "src/common/entities/category.entity";
-import { InsertResult, Repository } from "typeorm";
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CategoryEntity } from 'src/common/entities/category.entity';
+import { InsertResult, Repository } from 'typeorm';
 
 @Injectable()
 export class CategoryService {
@@ -21,11 +21,11 @@ export class CategoryService {
   async findOne(data: object): Promise<CategoryEntity | null> {
     return await this.categoryRepository.findOne({
       where: data,
-      relations: ["events", "events.venues"],
+      relations: ['events', 'events.venues'],
     });
   }
 
   async upsert(data: any): Promise<InsertResult> {
-    return this.categoryRepository.upsert(data as object, ["externalId"]);
+    return this.categoryRepository.upsert(data as object, ['externalId']);
   }
 }

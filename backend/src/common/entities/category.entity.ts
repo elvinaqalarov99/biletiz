@@ -5,11 +5,11 @@ import {
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
-} from "typeorm";
-import { EventEntity } from "./event.entity";
-import { UserEntity } from "./user.entity";
+} from 'typeorm';
+import { EventEntity } from './event.entity';
+import { UserEntity } from './user.entity';
 
-@Entity("categories")
+@Entity('categories')
 export class CategoryEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -29,13 +29,13 @@ export class CategoryEntity {
   @Column({ nullable: true })
   externalUrl?: string;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ type: "timestamp", nullable: true })
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deletedAt: Date;
 
   @OneToMany(() => EventEntity, (event) => event.category)

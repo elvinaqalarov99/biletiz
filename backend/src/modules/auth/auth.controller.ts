@@ -8,18 +8,18 @@ import {
   Req,
   UseGuards,
   UnauthorizedException,
-} from "@nestjs/common";
-import { AuthService } from "./auth.service";
-import { UserLoginDto } from "src/modules/users/dto/user-login.dto";
-import { Request, Response } from "express";
-import { JwtAuthGuard } from "./jwt-auth.guard";
+} from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { UserLoginDto } from 'src/modules/users/dto/user-login.dto';
+import { Request, Response } from 'express';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
-@Controller("auth")
+@Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post("login")
+  @Post('login')
   async signIn(
     @Req() req: Request,
     @Res() res: Response,
@@ -28,7 +28,7 @@ export class AuthController {
     if (req.cookies?.refresh_token as string) {
       return res.status(HttpStatus.FORBIDDEN).json({
         statusCode: HttpStatus.FORBIDDEN,
-        message: "You are logged in",
+        message: 'You are logged in',
       });
     }
 
@@ -42,12 +42,12 @@ export class AuthController {
   }
 
   // Refresh Access Token route
-  @Post("refresh-token")
+  @Post('refresh-token')
   refresh(@Req() req: Request, @Res() res: Response) {
     const refreshToken = req.cookies?.refresh_token as string; // Get refresh token from cookies
 
     if (!refreshToken) {
-      throw new UnauthorizedException("Refresh token is required");
+      throw new UnauthorizedException('Refresh token is required');
     }
 
     this.authService.refreshToken(res, refreshToken);
@@ -58,7 +58,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post("logout")
+  @Post('logout')
   signOut(@Res() res: Response) {
     const resData = this.authService.signOut(res);
 
@@ -66,7 +66,7 @@ export class AuthController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post("me")
+  @Post('me')
   getMe(@Req() req: Request, @Res() res: Response) {
     return res.status(HttpStatus.OK).json({
       statusCode: HttpStatus.OK,

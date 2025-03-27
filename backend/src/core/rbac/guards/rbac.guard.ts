@@ -1,9 +1,9 @@
-import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { RbacService } from "../rbac.service";
-import { UserEntity } from "src/common/entities/user.entity";
-import { PERMISSIONS_KEY } from "../decorators/permission.decorator";
-import { PermissionEnum } from "../enums/permission.enum";
+import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { RbacService } from '../rbac.service';
+import { UserEntity } from 'src/common/entities/user.entity';
+import { PERMISSIONS_KEY } from '../decorators/permission.decorator';
+import { PermissionEnum } from '../enums/permission.enum';
 
 @Injectable()
 export class RbacGuard implements CanActivate {

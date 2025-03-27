@@ -1,11 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { HttpService } from "@nestjs/axios";
-import { firstValueFrom } from "rxjs";
-import { IITicketApiService } from "./interfaces/iticket-api.interface";
+import { Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+import { IITicketApiService } from './interfaces/iticket-api.interface';
 
 @Injectable()
 export class ITicketApiService {
-  private readonly baseUrl = "https://api.iticket.az/en/v5/{type}?client=web";
+  private readonly baseUrl = 'https://api.iticket.az/en/v5/{type}?client=web';
 
   constructor(private readonly httpService: HttpService) {}
 
@@ -16,8 +16,8 @@ export class ITicketApiService {
   ): Promise<IITicketApiService | null> {
     try {
       const url =
-        `${this.baseUrl}${isPagination ? "&page=" + page : ""}`.replace(
-          "{type}",
+        `${this.baseUrl}${isPagination ? '&page=' + page : ''}`.replace(
+          '{type}',
           type,
         );
       const response = await firstValueFrom(this.httpService.get(url));
@@ -39,10 +39,10 @@ export class ITicketApiService {
   }
 
   public async events(page: number = 1): Promise<IITicketApiService | null> {
-    return await this.fetch("events", true, page);
+    return await this.fetch('events', true, page);
   }
 
   public async categories(): Promise<IITicketApiService | null> {
-    return await this.fetch("categories");
+    return await this.fetch('categories');
   }
 }

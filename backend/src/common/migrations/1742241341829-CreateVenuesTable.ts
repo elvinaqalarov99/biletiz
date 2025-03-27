@@ -1,58 +1,58 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm";
+import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
 export class CreateVenuesTable1742241341829 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: "venues",
+        name: 'venues',
         columns: [
           {
-            name: "id",
-            type: "int",
+            name: 'id',
+            type: 'int',
             isPrimary: true,
             isGenerated: true,
-            generationStrategy: "increment",
+            generationStrategy: 'increment',
           },
           {
-            name: "external_id",
-            type: "int",
+            name: 'external_id',
+            type: 'int',
             isUnique: true,
           },
           {
-            name: "name",
-            type: "varchar",
+            name: 'name',
+            type: 'varchar',
           },
           {
-            name: "map_lat",
-            type: "varchar",
+            name: 'map_lat',
+            type: 'varchar',
           },
           {
-            name: "map_lng",
-            type: "varchar",
+            name: 'map_lng',
+            type: 'varchar',
           },
           {
-            name: "phone",
-            type: "varchar",
+            name: 'phone',
+            type: 'varchar',
             isNullable: true,
           },
           {
-            name: "mobile",
-            type: "varchar",
+            name: 'mobile',
+            type: 'varchar',
             isNullable: true,
           },
           {
-            name: "created_at",
-            type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
+            name: 'created_at',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
-            name: "updated_at",
-            type: "timestamp",
-            default: "CURRENT_TIMESTAMP",
+            name: 'updated_at',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
           },
           {
-            name: "deleted_at",
-            type: "timestamp",
+            name: 'deleted_at',
+            type: 'timestamp',
             isNullable: true,
           },
         ],
@@ -89,8 +89,8 @@ export class CreateVenuesTable1742241341829 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable("event_venue");
-    await queryRunner.dropTable("venues");
+    await queryRunner.dropTable('event_venue');
+    await queryRunner.dropTable('venues');
     await queryRunner.query(`
       DELETE FROM "permissions" WHERE name = 'venue_read';
     `);
